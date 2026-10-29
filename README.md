@@ -24,7 +24,7 @@ Install [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) separately thro
 
 `theme.js` paints both Spicy Lyrics' picture-in-picture window and Spotify's native Document Picture-in-Picture mini player. It runs only when the browser exposes that API. Spotify changes its mini player markup between releases; shared window and button styling is resilient, while finer control styling may need updates.
 
-The bottom-left player shows the next queued song beneath the current track. It reads Spicetify's queue locally, updates on song changes and at a low frequency while the window is visible, and never starts playback or makes network requests.
+An Aero card above the bottom-left player appears when Spicetify reports a next song, whether it comes from the explicit queue or normal playlist playback. It disappears when no next song is available. It reads player state locally, updates on song changes and at a low frequency while the window is visible, and never starts playback or makes network requests.
 
 ## Development
 
