@@ -33,7 +33,7 @@
   }
 })();
 
-/* Show one queued song beside Spotify's own now-playing metadata. No network
+/* Show one next song in a small card above Spotify's player. No network
    requests, queue mutations, playback calls, or DOM-wide observers. */
 (() => {
   const ID = "aerify-up-next";
@@ -47,26 +47,30 @@
     const api = window.Spicetify;
     if (!host || !api) return;
 
-    let row = document.getElementById(ID);
-    if (!row) {
-      row = document.createElement("div");
-      row.id = ID;
-      row.className = "aerify-up-next";
-      row.setAttribute("aria-label", "Next in queue");
-      row.innerHTML = '<span class="aerify-up-next__label">Up next</span><span class="aerify-up-next__song"></span>';
-      host.appendChild(row);
+    const next = api.Queue?.nextTracks?.find((item) => item?.metadata?.title)
+      || api.Player?.data?.next_tracks?.find((item) => item?.metadata?.title);
+    let card = document.getElementById(ID);
+    if (!next) {
+      card?.remove();
       lastText = "";
+      return;
     }
 
-    const tracks = api.Queue?.nextTracks?.length
-      ? api.Queue.nextTracks
-      : api.Player?.data?.next_tracks;
-    const next = tracks?.find((item) => item?.metadata?.title);
-    const title = next?.metadata?.title || "Queue is empty";
+    if (!card) {
+      card = document.createElement("div");
+      card.id = ID;
+      card.className = "aerify-up-next";
+      card.innerHTML = '<span class="aerify-up-next__icon" aria-hidden="true"></span><span class="aerify-up-next__details"><span class="aerify-up-next__label">Up next</span><span class="aerify-up-next__song"></span><span class="aerify-up-next__artist"></span></span>';
+      document.body.appendChild(card);
+    }
+
+    const title = next.metadata.title;
     const artist = next?.metadata?.artist_name;
     const text = artist ? `${title} · ${artist}` : title;
     if (text !== lastText) {
-      row.querySelector(".aerify-up-next__song").textContent = text;
+      card.querySelector(".aerify-up-next__song").textContent = title;
+      card.querySelector(".aerify-up-next__artist").textContent = artist || "";
+      card.setAttribute("aria-label", `Up next: ${text}`);
       lastText = text;
     }
   }
