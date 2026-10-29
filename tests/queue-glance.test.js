@@ -14,7 +14,7 @@ function setup(queueTracks = [], playerTracks = [], nowPlayingPanel = null) {
   const document = {
     body,
     visibilityState: 'visible',
-    querySelector(selector) { return selector.includes('Now playing view') ? nowPlayingPanel : {}; },
+    querySelector(selector) { return selector.includes('Now playing view') ? nowPlayingPanel : null; },
     getElementById() { return body.card; },
     createElement() {
       return {
@@ -73,16 +73,15 @@ test('no card is shown for an empty or unresolved next track', () => {
   assert.equal(state.body.card, null);
 });
 
-test('visible Now Playing next-in-queue row fills an empty API snapshot', () => {
+test('visible Now Playing group name fills an empty API snapshot without a track link', () => {
   const group = {
-    querySelector(selector) {
-      return selector.includes('/track/') ? { textContent: 'I Feel It Coming' } : null;
-    },
+    innerText: 'I Feel It Coming\nThe Weeknd\nDaft Punk',
+    querySelector() { return null; },
+    getAttribute() { return null; },
     querySelectorAll() { return [{ textContent: 'The Weeknd' }, { textContent: 'Daft Punk' }]; },
   };
-  const section = { querySelector() { return group; } };
-  const heading = { textContent: 'Next in queue', closest() { return section; } };
-  const panel = { querySelectorAll() { return [heading]; } };
+  const heading = { textContent: 'Next in queue', compareDocumentPosition() { return 4; } };
+  const panel = { querySelectorAll(selector) { return selector.includes('group') ? [group] : [heading]; } };
   const state = setup([], [], panel);
   assert.equal(state.song.textContent, 'I Feel It Coming');
   assert.equal(state.artist.textContent, 'The Weeknd, Daft Punk');
