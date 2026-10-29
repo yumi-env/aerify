@@ -24,7 +24,7 @@ Recreate the feeling of opening a polished Vista/Windows 7 music player: a brigh
 - Cards: 10px radius, thin pale border, modest offset shadow, inset highlight.
 - Navigation: mostly 5px radius, compact, with a glowing green-teal selected state.
 - Transport: dark continuous strip with a 44px round play control and recessed progress track.
-- Queue glance: one unobtrusive next-song label under the current track in the bottom-left transport area.
+- Queue glance: a compact glass card above the bottom-left transport area, visible only while a next song is known.
 - Lyrics: quiet inactive lines; current line gets white fill and a soft mint light. Artwork is not recolored.
 - Compact player: the Spicy Lyrics picture-in-picture window uses the same cyan frame and dark player footer.
 - Separate windows: `theme.js` adds a scoped stylesheet to Spotify's Document Picture-in-Picture window so the native mini player and Spicy Lyrics popup share the frame even when the main document's CSS is not copied.
