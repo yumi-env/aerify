@@ -11,6 +11,14 @@
         radial-gradient(ellipse at 35% 23%, rgba(28,190,141,.24), transparent 48%),
         linear-gradient(135deg, #0b6b66 0%, #064b3f 40%, #043d38 100%) !important;
     }
+    /* Spotify 2.45 paints album colors inside the native mini player.
+       Keep the artwork intact while returning its surrounding panes to Aero. */
+    .bEhb_FeKn_j0Not8O0Ua.lU7tUttQCWgCYIa94kbj,
+    .YuzpBXP96GzhAXf5obZy.lU7tUttQCWgCYIa94kbj,
+    .ghBgdrw7Mt2h5LGm0Fj_::before {
+      background: linear-gradient(145deg, #176b66, #064b3f 57%, #043d38) !important;
+      background-color: #064b3f !important;
+    }
     body::before {
       content: "";
       position: fixed;
@@ -83,7 +91,6 @@
    requests, queue mutations, playback calls, or DOM-wide observers. */
 (() => {
   const ID = "aerify-up-next";
-  const PLAYER_BAR = '[data-testid="now-playing-bar"], [aria-label="Now playing bar"], .main-nowPlayingBar-nowPlayingBar, .Root__now-playing-bar';
   let timer;
   let retries = 0;
   let lastText = "";
@@ -111,26 +118,36 @@
   // Spotify can show the next context song in Now Playing while the public
   // queue snapshots are empty. Read only that visible, already-rendered panel.
   function nextFromNowPlayingView() {
-    const panel = document.querySelector('[role="complementary"][aria-label="Now playing view"], aside[aria-label="Now playing view"]');
+    const panel = document.querySelector('#Desktop_PanelContainer_Id, [data-testid="now-playing-view"], [role="complementary"][aria-label="Now playing view"], aside[aria-label="Now playing view"]');
     if (!panel?.querySelectorAll) return null;
-    const heading = Array.from(panel.querySelectorAll("h2, h3, [role='heading']"))
+    const heading = Array.from(panel.querySelectorAll("h1, h2, h3, h4, [role='heading']"))
       .find((node) => node.textContent?.trim() === "Next in queue");
+    if (!heading) return null;
     const section = heading?.closest?.("section") || heading?.parentElement?.parentElement;
-    const group = section?.querySelector?.('[role="group"]');
+    const localGroups = section?.querySelectorAll?.('[role="group"]');
+    const groups = Array.from(localGroups?.length ? localGroups : panel.querySelectorAll('[role="group"]'));
+    const group = groups.find((node) => Boolean(heading.compareDocumentPosition?.(node) & 4))
+      || section?.querySelector?.('[role="group"]');
     if (!group) return null;
+    const artists = Array.from(group.querySelectorAll?.('a[href*="/artist/"]') || [])
+      .map((link) => link.textContent?.trim()).filter(Boolean);
+    const artist = artists.join(", ");
+    const labelId = group.getAttribute?.("aria-labelledby")?.split(/\s+/)[0];
+    const labelledTitle = labelId ? document.getElementById(labelId)?.textContent?.trim() : "";
+    const rawText = group.innerText || group.textContent || "";
+    const textWithoutArtists = artists.reduce((text, name) => text.replace(name, ""), rawText);
     const title = group.querySelector?.('a[href*="/track/"]')?.textContent?.trim()
-      || group.getAttribute?.("aria-label")?.trim();
+      || group.getAttribute?.("aria-label")?.trim()
+      || labelledTitle
+      || textWithoutArtists.split(/\r?\n/).map((line) => line.trim()).find(Boolean);
     if (!title) return null;
-    const artist = Array.from(group.querySelectorAll?.('a[href*="/artist/"]') || [])
-      .map((link) => link.textContent?.trim()).filter(Boolean).join(", ");
     return { title, artist };
   }
 
   function render() {
     if (document.visibilityState === "hidden") return;
-    const host = document.querySelector(PLAYER_BAR);
     const api = window.Spicetify;
-    if (!host || !api) return;
+    if (!api) return;
 
     const next = firstTrack(api.Queue?.nextTracks) || firstTrack(api.Player?.data?.next_tracks)
       || nextFromNowPlayingView();
@@ -161,7 +178,7 @@
   }
 
   function mount() {
-    if (!window.Spicetify?.Player || !document.querySelector(PLAYER_BAR)) {
+    if (!window.Spicetify?.Player) {
       if (retries++ < 60) setTimeout(mount, 500);
       return;
     }
