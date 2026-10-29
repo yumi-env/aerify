@@ -1,0 +1,38 @@
+# Aerify
+
+A glassy Windows Vista / Windows 7 inspired Spicetify theme. It gives Spotify a teal Aero frame, translucent Media Center tiles, and a dark Windows Media Player transport deck. It also styles [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics)' full-screen lyrics and picture-in-picture popup as an Aero mini player.
+
+![Aerify concept preview](preview/aerify-preview.svg)
+
+## Install
+
+1. Install [Spotify desktop and Spicetify](https://spicetify.app/docs/getting-started/).
+2. Copy this repository into your Spicetify `Themes` folder as `Aerify`. On Windows that folder is `%appdata%\spicetify\Themes\Aerify`; on macOS/Linux it is `~/.config/spicetify/Themes/Aerify`.
+3. Run:
+
+   ```sh
+   spicetify config current_theme Aerify color_scheme Aero
+   spicetify config inject_css 1 replace_colors 1
+   spicetify apply
+   ```
+
+`Aero Blue` is an alternate color scheme: `spicetify config color_scheme "Aero Blue"`, then `spicetify apply`.
+
+## Lyrics and mini player
+
+Install [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) separately through Spicetify Marketplace. Its full-screen page gets Aerify's frosted background and luminous active line. Its **Spicy Popup Lyrics** button opens the picture-in-picture mini player, which receives the same Aero frame and transport styling. Aerify does not bundle or modify Spicy Lyrics, and lyrics availability depends on that extension and its sources.
+
+Spotify's own mini player receives a best-effort style for its shared controls. Spotify changes its markup between releases, so the Spicy Lyrics popup is the supported lyrics mini player experience for this theme.
+
+## Development
+
+- `color.ini` defines Spicetify's semantic colors.
+- `user.css` styles Spotify and the optional Spicy Lyrics extension.
+- `preview/aerify-preview.svg` is a concept illustration for the visual direction, not a screenshot of a live Spotify installation.
+
+The theme uses native Spotify playback and navigation. No JavaScript, external fonts, network calls, or lyric provider credentials are included. CSS selectors may need maintenance after Spotify or Spicy Lyrics updates.
+
+## Credits
+
+Visual inspiration: Windows Vista / Windows 7 Aero and Windows Media Player, the supplied Aerify reference image, and the tactile buttons of [Heyclicky](https://www.heyclicky.com/). Spicy Lyrics remains a separate project by its maintainers.
+
