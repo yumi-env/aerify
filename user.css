@@ -15,34 +15,46 @@
 html,body,#main {color:var(--aero-ink);background:#07534f;font-family:var(--aero-font)}
 body::after {
   content:"";position:fixed;inset:0;z-index:2147483000;pointer-events:none;
-  border:3px solid #56cfe2;
-  box-shadow:inset 0 0 0 1px #e3ffff,inset 0 0 0 4px rgba(8,93,111,.75),
-    inset 0 5px 8px rgba(255,255,255,.2);
+  border:10px solid #43bdd2;
+  border-top-color:#90ecf8;
+  border-right-color:#168da6;
+  border-bottom-color:#0b6781;
+  box-shadow:inset 0 0 0 2px #e3ffff,inset 0 0 0 5px rgba(5,75,91,.75),
+    inset 0 8px 13px rgba(255,255,255,.23),0 0 0 1px #063c4c;
+}
+body::before {
+  content:"";position:fixed;inset:0 10px auto;z-index:2147482999;
+  height:12px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.43),rgba(255,255,255,.10) 68%,transparent);
 }
 /* Convex cyan window chrome retains Spotify's native controls and order. */
-[data-testid="global-nav"],header:has(input[placeholder*="What do you want to play"]) {
-  background:linear-gradient(180deg,#c9fbff 0%,#77d9ec 9%,#38b5d0 45%,#158fac 49%,
-    #147a96 50%,#0c607b 88%,#084b65 100%) !important;
+#global-nav-bar,[data-testid="global-nav"] {
+  background:linear-gradient(180deg,#d3fdff 0%,#82e6f3 8%,#4bc5de 36%,#1ca0bd 49%,
+    #1685a2 50%,#0b6482 87%,#084b65 100%) !important;
   border-bottom:1px solid #dbffff !important;
-  box-shadow:inset 0 1px #fff,inset 0 -2px rgba(0,47,66,.55),
-    0 3px 9px rgba(0,26,37,.38) !important;
+  box-shadow:inset 0 1px #fff,inset 0 -2px rgba(0,47,66,.7),
+    0 4px 9px rgba(0,26,37,.48) !important;
 }
-[data-testid="global-nav"] :is(button,[role="button"]) {color:#f3ffff}
-[data-testid="global-nav"] button:hover {
+#global-nav-bar :is(button,[role="button"]) {color:#f3ffff}
+#global-nav-bar button:hover {
   background:linear-gradient(180deg,rgba(240,255,255,.34),rgba(0,58,77,.18)) !important;
   box-shadow:inset 0 1px rgba(255,255,255,.5);
 }
-input[placeholder*="What do you want to play"],[data-testid="global-nav"] input {
+input[placeholder*="What do you want to play"],#global-nav-bar input {
   color:#143d48 !important;background:linear-gradient(180deg,#f8ffff,#dceef0) !important;
   border:1px solid #8db8c3 !important;border-radius:6px !important;
   box-shadow:inset 0 1px 3px rgba(15,77,97,.26),0 1px rgba(255,255,255,.68) !important;
 }
 input[placeholder*="What do you want to play"]::placeholder {color:#477781 !important;opacity:1}
+/* Current Spotify 2.45 search wrapper; the input remains in its native slot. */
+#global-nav-bar .oxFroaXCJTMXfoZDaaf1 {max-width:440px}
 /* The library is a darker, beveled Aero pane. */
-nav[aria-label="Main"],nav[aria-label="Your Library"] {
-  background:linear-gradient(155deg,#318e8d 0%,#1b7475 22%,#0c575d 64%,#0a414d 100%) !important;
+nav[aria-label="Main"],nav[aria-label="Your Library"],#Desktop_LeftSidebar_Id {
+  background:linear-gradient(155deg,#359b9b 0%,#1d7777 20%,#0c555d 64%,#073b47 100%) !important;
   border-right:1px solid rgba(211,255,251,.72) !important;
-  box-shadow:inset 1px 0 rgba(255,255,255,.38),inset -2px 0 rgba(0,41,52,.38) !important;
+  border-radius:8px 3px 3px 8px;
+  box-shadow:inset 1px 0 rgba(255,255,255,.48),inset -2px 0 rgba(0,41,52,.48),
+    inset 0 2px rgba(227,255,252,.28) !important;
 }
 nav[aria-label="Main"] :is([aria-current="page"],[aria-selected="true"]),
 nav[aria-label="Your Library"] :is([aria-current="page"],[aria-selected="true"]) {
@@ -58,32 +70,36 @@ nav[aria-label="Your Library"] :is(button,a,[role="row"]):hover {
   box-shadow:inset 0 0 0 1px rgba(218,255,245,.25);
 }
 /* Dark emerald listening surface and localized green light pools. */
-#main main,[data-testid="home-page"],[data-testid="playlist-page"],[data-testid="track-page"] {
+#main-view,#main main,[data-testid="home-page"],[data-testid="playlist-page"],[data-testid="track-page"] {
   color:var(--aero-ink);background-color:var(--aero-emerald) !important;
   background-image:
-    radial-gradient(ellipse 17% 20% at 82% 78%,rgba(152,241,29,.28),transparent 100%),
-    radial-gradient(ellipse 21% 29% at 62% 42%,rgba(15,191,139,.25),transparent 100%),
-    radial-gradient(ellipse 22% 20% at 14% 8%,rgba(71,198,196,.22),transparent 100%),
-    linear-gradient(125deg,#115d57 0%,#064d43 29%,#06493c 58%,#023d36 100%) !important;
+    radial-gradient(circle 12px at 78% 14%,rgba(144,255,109,.36),transparent 100%),
+    radial-gradient(circle 18px at 91% 54%,rgba(130,255,60,.27),transparent 100%),
+    radial-gradient(circle 10px at 54% 31%,rgba(108,253,192,.31),transparent 100%),
+    radial-gradient(circle 26px at 68% 78%,rgba(171,252,39,.20),transparent 100%),
+    radial-gradient(ellipse 22% 23% at 88% 72%,rgba(167,245,31,.42),transparent 100%),
+    radial-gradient(ellipse 20% 25% at 61% 42%,rgba(17,201,128,.36),transparent 100%),
+    radial-gradient(ellipse 17% 19% at 14% 8%,rgba(71,198,196,.17),transparent 100%),
+    linear-gradient(125deg,#0e6352 0%,#06563c 28%,#034c34 58%,#013b31 100%) !important;
+}
+#main-view {
+  border:1px solid rgba(221,255,245,.71) !important;
+  border-radius:10px;
+  box-shadow:inset 0 1px rgba(255,255,255,.36),inset 0 0 0 2px rgba(0,41,40,.43),
+    0 3px 8px rgba(0,27,30,.36) !important;
 }
 #main main :is(h1,h2,h3) {color:#f8fffb;text-shadow:0 1px 2px rgba(0,28,27,.65)}
-/* Paint tile containers, never their nested text links. */
-[data-testid="home-page"] :is(div,li):has(> a[href^="/playlist/"]):has(> button),
-[data-testid="home-page"] :is(div,li):has(> a[href^="/album/"]):has(> button),
-[data-testid="home-page"] [role="button"]:has(> a[href^="/playlist/"]),
-[data-testid="home-page"] [role="button"]:has(> a[href^="/album/"]),
-[data-testid="grid-container"] > div {
-  background:linear-gradient(180deg,rgba(134,228,209,.24),rgba(33,121,106,.28) 45%,
-    rgba(1,55,48,.62) 46%,rgba(0,47,42,.67)) !important;
-  border:1px solid rgba(197,255,232,.40) !important;border-radius:4px !important;
-  box-shadow:inset 0 1px rgba(240,255,249,.4),inset 0 -1px rgba(0,34,32,.55),
-    0 2px 5px rgba(0,23,23,.3) !important;
+/* Spotify's shortcut has a direct shortcut-background child. Paint that
+   container rather than its nested text link. */
+[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]) {
+  background:linear-gradient(180deg,rgba(112,224,160,.29) 0%,rgba(32,123,75,.34) 46%,
+    rgba(1,61,45,.73) 47%,rgba(0,43,38,.78) 100%) !important;
+  border:1px solid rgba(216,255,238,.65) !important;border-radius:4px !important;
+  box-shadow:inset 0 1px rgba(245,255,249,.65),inset 0 -1px rgba(0,25,24,.76),
+    0 2px 7px rgba(0,18,20,.4) !important;
   transition:border-color .16s ease,box-shadow .16s ease;
 }
-[data-testid="home-page"] :is(div,li):has(> a[href^="/playlist/"]):has(> button):hover,
-[data-testid="home-page"] :is(div,li):has(> a[href^="/album/"]):has(> button):hover,
-[data-testid="home-page"] [role="button"]:has(> a[href^="/playlist/"]):hover,
-[data-testid="grid-container"] > div:hover {
+[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]):hover {
   border-color:rgba(230,255,244,.84) !important;
   box-shadow:inset 0 1px rgba(255,255,255,.58),inset 0 -1px rgba(0,39,34,.5),
     0 4px 9px rgba(0,23,23,.35) !important;
@@ -92,30 +108,54 @@ nav[aria-label="Your Library"] :is(button,a,[role="row"]):hover {
   a[href^="/artist/"],a[href^="/collection/"]) {
   background:transparent !important;border:0 !important;box-shadow:none !important;
 }
-[data-testid="home-page"] [data-testid="play-button"],
-[data-testid="home-page"] button[aria-label="Play"] {
+[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]) button {
   color:#f3fff9 !important;background:rgba(1,54,44,.55) !important;
   border:1px solid rgba(205,255,231,.5) !important;
   box-shadow:inset 0 1px rgba(255,255,255,.22),0 2px 5px rgba(0,25,23,.34) !important;
   opacity:.2;transform:scale(.82);
   transition:opacity .15s ease,transform .15s ease,background .15s ease;
 }
-[data-testid="home-page"] :is(:hover,:focus-within) > [data-testid="play-button"],
-[data-testid="home-page"] :is(:hover,:focus-within) > button[aria-label="Play"],
-[data-testid="home-page"] [data-testid="play-button"]:focus-visible,
-[data-testid="home-page"] button[aria-label="Play"]:focus-visible {
+[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]):is(:hover,:focus-within) button,
+[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]) button:focus-visible {
   opacity:1;transform:scale(.94);color:#064937 !important;
   background:linear-gradient(180deg,#b9ffdc,#4fdfaa 45%,#138c69) !important;
 }
 [data-testid="home-page"] img,[data-testid="playlist-page"] img {
   box-shadow:0 2px 5px rgba(0,23,23,.38);
 }
-[data-testid="grid-container"] > div img {border-radius:3px !important}
+img[data-testid="shortcut-image"] {
+  border:1px solid rgba(229,255,242,.47);border-radius:3px !important;
+}
+/* Spotify 2.45's own shortcut grid: keep its links and ordering, but use
+   Media Center density when the content pane has enough room. */
+@container (width >= 840px) {
+  [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed {
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+}
+@container (580px <= width < 840px) {
+  [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed {
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+}
 /* Right panel and table rows get inset treatment. */
-#Desktop_PanelContainer_Id {
-  background:linear-gradient(160deg,#155f58,#063d39 72%,#042e31) !important;
+#Desktop_PanelContainer_Id,.s8fIIxwITjOk1aFOxhPv {
+  background:linear-gradient(160deg,#125e52,#063d39 72%,#032e31) !important;
   border-left:1px solid rgba(205,255,240,.65) !important;
   box-shadow:inset 1px 0 rgba(255,255,255,.24) !important;
+}
+#Desktop_PanelContainer_Id::before {
+  background-color:#064b3f !important;
+  background-image:linear-gradient(180deg,rgba(39,132,106,.32),rgba(1,38,36,.5)) !important;
+  opacity:1 !important;
+}
+#Desktop_PanelContainer_Id [data-testid="cover-art-slot"] {
+  border:1px solid rgba(221,255,238,.75);
+  border-radius:5px;
+  box-shadow:inset 0 1px rgba(255,255,255,.46),0 5px 13px rgba(0,22,24,.56);
+  overflow:hidden;
 }
 #Desktop_PanelContainer_Id img {
   border:1px solid rgba(222,255,241,.66);border-radius:4px;
@@ -130,13 +170,18 @@ nav[aria-label="Your Library"] :is(button,a,[role="row"]):hover {
   box-shadow:inset 0 0 0 1px rgba(199,255,227,.35);
 }
 /* Continuous smoked-glass Windows Media Player transport. */
-[data-testid="now-playing-bar"],[aria-label="Now playing bar"] {
+[data-testid="now-playing-bar"],[aria-label="Now playing bar"],
+.XvuTwlgQRqJ5NnVLN9ZH {
   color:var(--aero-ink) !important;
   background:linear-gradient(180deg,#a7e8da 0%,#4e8d84 4%,#183b39 12%,
     #0b2424 28%,#071714 72%,#030e0e 100%) !important;
   border-top:1px solid #e5fff5 !important;
   box-shadow:inset 0 2px rgba(255,255,255,.35),inset 0 -2px rgba(0,0,0,.65),
     0 -4px 10px rgba(0,27,28,.48) !important;
+}
+[data-testid="now-playing-bar"]::before,.XvuTwlgQRqJ5NnVLN9ZH::before {
+  content:"";position:absolute;inset:0 0 auto;height:4px;pointer-events:none;
+  background:linear-gradient(180deg,#e6fff7 0%,#9abbb1 39%,#386a66 42%,transparent 100%);
 }
 [data-testid="now-playing-bar"] button {border-radius:999px}
 [data-testid="now-playing-bar"] button:hover {
