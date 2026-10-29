@@ -34,5 +34,5 @@ Segoe UI is first choice for the Windows era. Trebuchet MS and Arial are fallbac
 
 ## Source notes
 
-The user-supplied Spotify/Aero composite is the primary target. The Vista desktop and Media Center references inform framing and translucency. Heyclicky's pill buttons inform tactile highlights only; this is intentionally more Windows media player than web landing page.
+The user-supplied Spotify/Aero composite is the primary target. The Vista desktop and Media Center references inform framing, translucency, and tactile controls.
 
