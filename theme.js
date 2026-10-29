@@ -44,8 +44,8 @@
   function render() {
     if (document.visibilityState === "hidden") return;
     const host = document.querySelector('[data-testid="now-playing-bar"], [aria-label="Now playing bar"], .main-nowPlayingBar-nowPlayingBar, .Root__now-playing-bar');
-    const queue = window.Spicetify?.Queue;
-    if (!host || !queue) return;
+    const api = window.Spicetify;
+    if (!host || !api) return;
 
     let row = document.getElementById(ID);
     if (!row) {
@@ -58,7 +58,10 @@
       lastText = "";
     }
 
-    const next = queue.nextTracks?.find((item) => item?.metadata?.title);
+    const tracks = api.Queue?.nextTracks?.length
+      ? api.Queue.nextTracks
+      : api.Player?.data?.next_tracks;
+    const next = tracks?.find((item) => item?.metadata?.title);
     const title = next?.metadata?.title || "Queue is empty";
     const artist = next?.metadata?.artist_name;
     const text = artist ? `${title} · ${artist}` : title;
