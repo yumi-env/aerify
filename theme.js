@@ -13,11 +13,17 @@
     }
     /* Spotify 2.45 paints album colors inside the native mini player.
        Keep the artwork intact while returning its surrounding panes to Aero. */
-    .bEhb_FeKn_j0Not8O0Ua.lU7tUttQCWgCYIa94kbj,
-    .YuzpBXP96GzhAXf5obZy.lU7tUttQCWgCYIa94kbj,
+    .bEhb_FeKn_j0Not8O0Ua,
+    [data-testid="pip-hover-element"],
+    [data-testid="pip-hover-element"]::before,
     .ghBgdrw7Mt2h5LGm0Fj_::before {
       background: linear-gradient(145deg, #176b66, #064b3f 57%, #043d38) !important;
       background-color: #064b3f !important;
+    }
+    .YuzpBXP96GzhAXf5obZy:not(.d1F3jdoyRw1tu9L_r7e1) {
+      background: linear-gradient(180deg, rgba(80,143,133,.87), #0a302d 18%, #041413 100%) !important;
+      border-top: 1px solid #c6fff4 !important;
+      box-shadow: inset 0 2px rgba(255,255,255,.2) !important;
     }
     body::before {
       content: "";
