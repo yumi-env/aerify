@@ -2,7 +2,7 @@
 
 ## Project
 
-Aerify is a Spicetify theme inspired by Windows Vista and Windows 7 Aero media players. Keep Spotify's navigation, playback behavior, and accessibility intact. `color.ini` defines the schemes, `user.css` paints Spotify and Spicy Lyrics, and `theme.js` paints separate Document Picture-in-Picture windows.
+Aerify is a Spicetify theme inspired by Windows Vista and Windows 7 Aero media players. Keep Spotify's navigation, playback behavior, and accessibility intact. `color.ini` defines the schemes, `user.css` paints Spotify and Spicy Lyrics, and `theme.js` paints separate Document Picture-in-Picture windows and the bottom-left queue glance.
 
 ## Design boundaries
 
@@ -22,4 +22,3 @@ Aerify is a Spicetify theme inspired by Windows Vista and Windows 7 Aero media p
 
 - Push to `yumi-env/aerify` using the **soulflowxd** GitHub account. Do not use `yumi-env` credentials unless the user explicitly changes this instruction.
 - Verify the remote files after a push and report which parts were actually tested.
-
