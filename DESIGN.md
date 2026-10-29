@@ -26,6 +26,7 @@ Recreate the feeling of opening a polished Vista/Windows 7 music player: a brigh
 - Transport: dark continuous strip with a 44px round play control and recessed progress track.
 - Lyrics: quiet inactive lines; current line gets white fill and a soft mint light. Artwork is not recolored.
 - Compact player: the Spicy Lyrics picture-in-picture window uses the same cyan frame and dark player footer.
+- Separate windows: `theme.js` adds a scoped stylesheet to Spotify's Document Picture-in-Picture window so the native mini player and Spicy Lyrics popup share the frame even when the main document's CSS is not copied.
 
 ## Type and interaction
 
