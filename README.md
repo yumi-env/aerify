@@ -24,6 +24,8 @@ Install [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) separately thro
 
 `theme.js` paints both Spicy Lyrics' picture-in-picture window and Spotify's native Document Picture-in-Picture mini player. It runs only when the browser exposes that API. Spotify changes its mini player markup between releases; shared window and button styling is resilient, while finer control styling may need updates.
 
+The bottom-left player shows the next queued song beneath the current track. It reads Spicetify's queue locally, updates on song changes and at a low frequency while the window is visible, and never starts playback or makes network requests.
+
 ## Development
 
 - `color.ini` defines Spicetify's semantic colors.
@@ -31,9 +33,8 @@ Install [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) separately thro
 - `theme.js` styles separate picture-in-picture windows.
 - `preview/aerify-preview.svg` is a concept illustration for the visual direction, not a screenshot of a live Spotify installation.
 
-The theme uses native Spotify playback and navigation. Its small script only injects CSS into picture-in-picture documents. No external fonts, network calls, or lyric provider credentials are included. CSS selectors may need maintenance after Spotify or Spicy Lyrics updates.
+The theme uses native Spotify playback and navigation. Its script paints picture-in-picture documents and displays a single queue preview. No external fonts, network calls, or lyric provider credentials are included. CSS selectors may need maintenance after Spotify or Spicy Lyrics updates.
 
 ## Credits
 
-Visual inspiration: Windows Vista / Windows 7 Aero, Windows Media Player, and the supplied Aerify reference image. Spicy Lyrics remains a separate project by its maintainers.
-
+Visual inspiration: Windows Vista / Windows 7 Aero, Windows Media Player, the supplied Aerify reference image, and the Aero material in [WMPotify](https://github.com/Ingan121/WMPotify). Aerify retains Spotify's current navigation and does not include WMPotify code. Spicy Lyrics remains a separate project by its maintainers.
