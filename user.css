@@ -12,11 +12,98 @@
   --aero-glow: #63f5cf;
   --aero-radius: 10px;
   --aero-font: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
+  --background-base: #083f45;
+  --background-elevated-base: #175b62;
+  --background-highlight: #297b7d;
+  --background-tinted-base: rgba(90, 195, 185, .25);
+  --text-base: #f4fffc;
+  --text-subdued: #b6dbd8;
+  --essential-base: #f4fffc;
+  --essential-subdued: #a8d8d0;
+  --interactive-base: #4be0ae;
+  --interactive-hover: #8af8ca;
 }
 
 body, #main, .Root, .Root__top-container {
   color: var(--aero-ink);
   font-family: var(--aero-font);
+}
+
+/* Current Spotify builds expose stable test IDs even when their generated
+   CSS module classes change. These rules are the primary targeting layer. */
+body, #main, [data-testid="home-page"], [data-testid="playlist-page"],
+[data-testid="track-page"] {
+  background: radial-gradient(ellipse at 75% 6%, rgba(107,239,221,.21), transparent 40%),
+    linear-gradient(145deg, #115b60 0%, #074a4b 52%, #062d42 100%) !important;
+}
+
+[data-testid="home-page"] > div,
+[data-testid="playlist-page"] > div {
+  color: #f4fffc;
+}
+
+[data-testid="home-page"] a[href^="/playlist/"],
+[data-testid="home-page"] a[href^="/album/"],
+[data-testid="home-page"] a[href^="/artist/"],
+[data-testid="home-page"] a[href^="/collection/"] {
+  border-radius: 8px;
+}
+
+[data-testid="home-page"] a[href^="/playlist/"]:hover,
+[data-testid="home-page"] a[href^="/album/"]:hover,
+[data-testid="home-page"] a[href^="/artist/"]:hover {
+  background: rgba(146,244,222,.16);
+  box-shadow: inset 0 0 0 1px rgba(201,255,242,.36);
+}
+
+[data-testid="now-playing-bar"] {
+  background: linear-gradient(180deg, #7dc3bd 0%, #24575a 7%, #0b2c32 18%, #071a20 55%, #061216 100%) !important;
+  border-top: 1px solid rgba(216,255,245,.82);
+  box-shadow: inset 0 2px rgba(255,255,255,.24), 0 -5px 16px rgba(0,20,26,.36);
+  color: #f4fffc;
+  min-height: 80px;
+}
+
+[data-testid="now-playing-bar"] [data-testid="player-controls"] {
+  color: #eafff8;
+}
+
+[data-testid="now-playing-bar"] button {
+  border-radius: 999px;
+  transition: background .15s ease, filter .15s ease;
+}
+
+[data-testid="now-playing-bar"] button:hover {
+  background: rgba(166,247,226,.16);
+}
+
+[data-testid="now-playing-bar"] [data-testid="control-button-playpause"] {
+  color: #fff !important;
+  background: linear-gradient(180deg, #deffec, #73eeb4 38%, #1cb17d 52%, #006447) !important;
+  border: 2px solid #9befc9;
+  box-shadow: inset 0 1px rgba(255,255,255,.92), inset 0 -2px rgba(0,52,36,.52), 0 0 0 2px #08242b, 0 2px 9px rgba(0,0,0,.57);
+}
+
+[data-testid="now-playing-bar"] [data-testid="control-button-playpause"]:hover {
+  filter: brightness(1.12);
+}
+
+[data-testid="now-playing-bar"] [data-testid="playback-progressbar"],
+[data-testid="now-playing-bar"] [data-testid="progress-bar-background"] {
+  background: #07191d !important;
+  border: 1px solid rgba(170,235,215,.39);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.65), 0 1px rgba(219,255,242,.14);
+}
+
+[data-testid="now-playing-bar"] [data-testid="progressBarFg"] {
+  background: linear-gradient(180deg, #bdffe1, #52dda8 55%, #149773) !important;
+  box-shadow: 0 0 5px rgba(72,220,165,.4);
+}
+
+[data-testid="now-playing-bar"] [data-testid="playback-position"],
+[data-testid="now-playing-bar"] [data-testid="playback-duration"] {
+  color: #cbece0 !important;
+  font-variant-numeric: tabular-nums;
 }
 
 .Root__top-container {
