@@ -8,12 +8,12 @@ Recreate the feeling of opening a polished Vista/Windows 7 music player: a brigh
 
 | Role | Value | Use |
 | --- | --- | --- |
-| Shell cyan | `#0e889c` | Top frame and window light |
-| Deep teal | `#064946` | Main listening surface |
-| Transport black | `#071b1f` | Playback deck |
+| Shell cyan | `#52bdd5` | Top frame and window light |
+| Deep teal | `#0d706d` | Main listening surface |
+| Transport black | `#07191d` | Playback deck |
 | Primary text | `#f4fffc` | Labels and metadata |
 | Muted text | `#b6dbd8` | Secondary metadata |
-| Play green | `#4be0ae` | Primary playback action and progress |
+| Play green | `#64e3af` | Primary playback action and progress |
 | Focus lime | `#d6ff9c` | Keyboard focus ring |
 
 `color.ini` also provides an `Aero Blue` alternate scheme. Glass overlays use translucent white and teal above these opaque bases. Text stays opaque for readability.
@@ -24,6 +24,7 @@ Recreate the feeling of opening a polished Vista/Windows 7 music player: a brigh
 - Cards: 10px radius, thin pale border, modest offset shadow, inset highlight.
 - Navigation: mostly 5px radius, compact, with a glowing green-teal selected state.
 - Transport: dark continuous strip with a 44px round play control and recessed progress track.
+- Queue glance: one unobtrusive next-song label under the current track in the bottom-left transport area.
 - Lyrics: quiet inactive lines; current line gets white fill and a soft mint light. Artwork is not recolored.
 - Compact player: the Spicy Lyrics picture-in-picture window uses the same cyan frame and dark player footer.
 - Separate windows: `theme.js` adds a scoped stylesheet to Spotify's Document Picture-in-Picture window so the native mini player and Spicy Lyrics popup share the frame even when the main document's CSS is not copied.
@@ -34,5 +35,4 @@ Segoe UI is first choice for the Windows era. Trebuchet MS and Arial are fallbac
 
 ## Source notes
 
-The user-supplied Spotify/Aero composite is the primary target. The Vista desktop and Media Center references inform framing, translucency, and tactile controls.
-
+The user-supplied Spotify/Aero composite is the primary target. The Vista desktop and Media Center references inform framing, translucency, and tactile controls. WMPotify informs the brighter Aero material and beveled controls; Aerify keeps Spotify's existing navigation and layout.
