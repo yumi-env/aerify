@@ -1,6 +1,6 @@
 # Aerify
 
-A glassy Windows Vista / Windows 7 inspired Spicetify theme. It gives Spotify a teal Aero frame, translucent Media Center tiles, and a dark Windows Media Player transport deck. It also styles [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics)' full-screen lyrics and picture-in-picture popup as an Aero mini player.
+A Windows Vista / Windows 7 inspired Spicetify theme. It gives Spotify a bright cyan Aero frame, deep emerald listening surface, compact glass tiles, and a dark Windows Media Player transport deck. It also styles [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics)' full-screen lyrics and picture-in-picture popup as an Aero mini player.
 
 ![Aerify concept preview](preview/aerify-preview.svg)
 
