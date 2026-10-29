@@ -1,0 +1,310 @@
+/* Aerify — a Windows Vista/7 media-player skin for Spotify + Spicy Lyrics.
+   Spicetify injects this file into the Spotify client. Keep Spotify's own
+   controls and semantics; only the paint and responsive framing change. */
+
+:root {
+  --aero-ink: #f4fffc;
+  --aero-muted: #b6dbd8;
+  --aero-line: rgba(203, 255, 248, .42);
+  --aero-glass: rgba(36, 145, 153, .34);
+  --aero-deep: #071c24;
+  --aero-focus: #d6ff9c;
+  --aero-glow: #63f5cf;
+  --aero-radius: 10px;
+  --aero-font: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
+}
+
+body, #main, .Root, .Root__top-container {
+  color: var(--aero-ink);
+  font-family: var(--aero-font);
+}
+
+.Root__top-container {
+  background: linear-gradient(125deg, #0e889c 0%, #046477 28%, #063b55 68%, #0b253e 100%);
+}
+
+/* The outer shell is a translucent Windows frame. */
+.Root__globalNav,
+.main-globalNav-container,
+.main-topBar-container {
+  background: linear-gradient(180deg, rgba(189, 246, 255, .38), rgba(44, 153, 180, .24) 49%, rgba(7, 55, 76, .52) 50%, rgba(5, 45, 60, .44));
+  border-bottom: 1px solid rgba(207, 252, 255, .42);
+  box-shadow: inset 0 1px rgba(255,255,255,.55), 0 2px 8px rgba(0,17,29,.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+}
+
+.Root__nav-bar, .main-yourLibraryX-library,
+.main-yourLibraryX-libraryContainer,
+.main-navBar-navBar {
+  background: linear-gradient(165deg, rgba(48, 157, 151, .80), rgba(5, 70, 73, .9) 62%, rgba(6, 48, 58, .95));
+  box-shadow: inset -1px 0 rgba(206,255,251,.23), inset 0 1px rgba(255,255,255,.24);
+}
+
+.Root__main-view, .main-view-container,
+.main-view-container__scroll-node {
+  background: radial-gradient(ellipse at 75% 5%, rgba(62, 218, 193, .22), transparent 42%),
+    radial-gradient(ellipse at 9% 87%, rgba(0, 188, 128, .19), transparent 43%),
+    linear-gradient(145deg, #104d54 0%, #064946 52%, #052c3a 100%);
+}
+
+.main-view-container__scroll-node::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(175,255,240,.10), transparent);
+  pointer-events: none;
+}
+
+/* Inset tiles and cards echo Media Center rather than Spotify's flat cards. */
+.main-card-card,
+.main-cardImage-imageWrapper,
+.main-home-homeHeader [role="button"],
+.main-yourLibraryX-listItem,
+.main-trackList-trackListRow,
+[data-testid="grid-container"] > div {
+  border-radius: var(--aero-radius);
+}
+
+.main-card-card,
+.main-home-homeHeader [role="button"],
+[data-testid="grid-container"] > div {
+  background: linear-gradient(165deg, rgba(194,255,241,.17), rgba(25,119,113,.30) 45%, rgba(1,47,55,.43)) !important;
+  border: 1px solid rgba(200,255,246,.34);
+  box-shadow: inset 0 1px rgba(255,255,255,.27), 0 3px 10px rgba(0,28,31,.26);
+  backdrop-filter: blur(12px);
+  transition: background .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+.main-card-card:hover,
+.main-home-homeHeader [role="button"]:hover,
+[data-testid="grid-container"] > div:hover {
+  background: linear-gradient(165deg, rgba(215,255,248,.25), rgba(37,158,133,.38) 45%, rgba(3,72,72,.5)) !important;
+  border-color: rgba(211,255,244,.69);
+  box-shadow: inset 0 1px rgba(255,255,255,.46), 0 6px 17px rgba(0,30,31,.35);
+}
+
+.main-cardImage-imageWrapper img, .main-card-card img,
+.main-nowPlayingView-coverArt img {
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0,18,23,.5);
+}
+
+.main-trackList-trackListRow:hover,
+.main-yourLibraryX-listItem:hover,
+.main-yourLibraryX-listItem:focus-within {
+  background: rgba(144, 239, 221, .17) !important;
+  box-shadow: inset 0 0 0 1px rgba(207,255,246,.23);
+}
+
+.main-trackList-trackListRow[aria-selected="true"],
+.main-yourLibraryX-listItem[aria-selected="true"] {
+  background: rgba(82, 203, 172, .30) !important;
+  box-shadow: inset 0 0 0 1px rgba(218,255,237,.52);
+}
+
+/* Glassy sidebar navigation and period-correct pill controls. */
+.main-navBar-navBarItem a,
+.main-yourLibraryX-navItem,
+.main-yourLibraryX-filterArea button {
+  border-radius: 5px;
+  transition: background .15s ease, box-shadow .15s ease;
+}
+
+.main-navBar-navBarItem a:hover,
+.main-yourLibraryX-navItem:hover,
+.main-yourLibraryX-filterArea button:hover {
+  background: rgba(178,255,235,.19);
+  box-shadow: inset 0 1px rgba(255,255,255,.29);
+}
+
+.main-navBar-navBarItem a[aria-current="page"],
+.main-yourLibraryX-navItem[aria-current="page"] {
+  background: linear-gradient(180deg, rgba(108,234,207,.48), rgba(14,128,116,.56));
+  box-shadow: inset 0 1px rgba(241,255,250,.48), inset 0 -1px rgba(0,34,40,.25);
+}
+
+button[data-encore-id="buttonPrimary"],
+.Button-sc-1dqy6lx-0.encore-dark-theme,
+.main-playButton-PlayButton button {
+  color: #073c3b !important;
+  background: linear-gradient(180deg, #e7fff2 0%, #8af5bd 42%, #21af78 52%, #047454 100%) !important;
+  border: 1px solid rgba(211,255,230,.82) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.95), inset 0 -2px rgba(0,76,51,.37), 0 2px 8px rgba(0,27,24,.45) !important;
+}
+
+button[data-encore-id="buttonPrimary"]:hover,
+.main-playButton-PlayButton button:hover {
+  filter: brightness(1.12);
+}
+
+button[data-encore-id="buttonSecondary"],
+.main-globalNav-searchInputContainer,
+.main-topBar-button,
+.main-userWidget-box {
+  background: linear-gradient(180deg, rgba(252,255,255,.30), rgba(133,217,225,.18) 48%, rgba(25,84,100,.35) 49%, rgba(18,71,83,.43)) !important;
+  border: 1px solid rgba(209,255,255,.44) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.46), 0 1px 4px rgba(0,23,31,.3);
+  backdrop-filter: blur(12px);
+}
+
+/* The player is the visual anchor: a black glass transport deck. */
+.Root__now-playing-bar, .main-nowPlayingBar-container,
+.main-nowPlayingBar-nowPlayingBar {
+  background: linear-gradient(180deg, #83c5bb 0%, #285a5b 6%, #0d3035 17%, #071b1f 48%, #061214 100%) !important;
+  border-top: 1px solid rgba(213,255,244,.8);
+  box-shadow: inset 0 2px rgba(255,255,255,.21), 0 -5px 18px rgba(0,25,28,.42);
+}
+
+.main-nowPlayingBar-nowPlayingBar {
+  min-height: 80px;
+}
+
+.main-nowPlayingWidget-coverArt img {
+  border: 1px solid rgba(218,255,240,.47);
+  box-shadow: 0 2px 8px rgba(0,0,0,.65);
+}
+
+.player-controls__buttons {
+  gap: 6px;
+}
+
+.player-controls__buttons button,
+.main-nowPlayingBar-extraControls button,
+.main-nowPlayingBar-left button {
+  border-radius: 999px;
+  transition: filter .15s ease, box-shadow .15s ease;
+}
+
+.player-controls__buttons button:hover,
+.main-nowPlayingBar-extraControls button:hover {
+  background: rgba(142,244,213,.16);
+  box-shadow: inset 0 1px rgba(255,255,255,.35);
+}
+
+.player-controls__buttons button[data-testid="control-button-playpause"] {
+  width: 44px;
+  height: 44px;
+  color: #fff !important;
+  background: linear-gradient(180deg, #d4ffe2 0%, #65e5a7 24%, #159e70 50%, #006346 100%) !important;
+  border: 2px solid #8ce9bf;
+  box-shadow: inset 0 1px rgba(255,255,255,.9), inset 0 -2px rgba(0,51,37,.6), 0 0 0 2px rgba(0,25,31,.8), 0 2px 9px rgba(0,0,0,.65);
+}
+
+.playback-bar__progress-time, .main-playbackBar-progressTime {
+  color: #d7f4e7 !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-bar__bg, .main-playbackBar-progressBar {
+  background: rgba(1,16,19,.86) !important;
+  border: 1px solid rgba(154,219,198,.35);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.75), 0 1px rgba(220,255,240,.14);
+}
+
+.progress-bar__fg, .main-playbackBar-progressBarFg {
+  background: linear-gradient(180deg, #b7ffe0, #44d9a1 55%, #13906e) !important;
+  box-shadow: 0 0 5px rgba(68,217,161,.45);
+}
+
+/* Spicy Lyrics: frosted viewport, luminous active lines, media-deck NowBar. */
+#SpicyLyricsPage {
+  color: var(--aero-ink);
+  font-family: var(--aero-font);
+  background: radial-gradient(ellipse at 70% 15%, rgba(113,230,229,.30), transparent 50%),
+    linear-gradient(150deg, #103f5b, #075257 54%, #062c3d) !important;
+}
+
+#SpicyLyricsPage .ContentBox .LyricsContainer {
+  background: rgba(2,30,42,.28);
+  box-shadow: inset 0 1px rgba(225,255,255,.18);
+}
+
+#SpicyLyricsPage .LyricsContainer .LyricsContent .line {
+  color: rgba(229,250,247,.53) !important;
+  text-shadow: 0 1px 2px rgba(0,20,29,.65);
+  transition: color .28s ease, filter .28s ease;
+}
+
+#SpicyLyricsPage .LyricsContainer .LyricsContent .line.Active,
+#SpicyLyricsPage .LyricsContainer .LyricsContent .line.active,
+#SpicyLyricsPage .LyricsContainer .LyricsContent .line.Current {
+  color: #faffff !important;
+  text-shadow: 0 2px 3px rgba(0,30,38,.75), 0 0 16px rgba(111,255,219,.58);
+}
+
+#SpicyLyricsPage .ContentBox .NowBar .MediaImageContainer,
+#SpicyLyricsPage .ContentBox .NowBar .MediaBox {
+  border-radius: 9px;
+  box-shadow: 0 8px 26px rgba(0,17,29,.4), inset 0 1px rgba(255,255,255,.2);
+}
+
+#SpicyLyricsPage .ContentBox .NowBar .Metadata,
+#SpicyLyricsPage .ContentBox .NowBar .Timeline {
+  color: #f2fffb;
+  text-shadow: 0 1px 3px #072f37;
+}
+
+#SpicyLyricsPage .ViewControls button,
+#SpicyLyricsPage .ContentBox .NowBar button {
+  border-radius: 999px;
+}
+
+/* Spicy Lyrics' picture-in-picture window is the mini player. */
+.spicy-pip-wrapper {
+  background: linear-gradient(160deg, #158597, #084c60 55%, #05253a) !important;
+  border: 1px solid rgba(217,255,255,.64);
+  box-shadow: inset 0 1px rgba(255,255,255,.56), inset 0 0 0 3px rgba(24,126,143,.40);
+}
+
+.spicy-pip-wrapper #SpicyLyricsPage {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.spicy-pip-wrapper #SpicyLyricsPage .ContentBox .NowBar .CenteredView .Header {
+  background: linear-gradient(180deg, rgba(8,40,48,.1), rgba(3,19,26,.82));
+}
+
+.spicy-pip-wrapper #SpicyLyricsPage .LyricsContainer .LyricsContent .line {
+  text-shadow: 0 1px 3px rgba(0,13,20,.8);
+}
+
+/* Native Spotify mini-player builds vary; paint the shared controls when present. */
+body:has(.main-miniPlayer-container) .main-miniPlayer-container,
+.main-miniPlayer-container {
+  background: linear-gradient(160deg, #217d91, #0b4b60 55%, #06283b) !important;
+  color: #f4fffc !important;
+  border: 1px solid rgba(218,255,251,.66);
+  box-shadow: inset 0 1px rgba(255,255,255,.48), 0 6px 20px rgba(0,20,32,.48);
+}
+
+.main-miniPlayer-container button {
+  border-radius: 999px;
+}
+
+:where(button, a, [role="button"]):focus-visible {
+  outline: 2px solid var(--aero-focus) !important;
+  outline-offset: 2px;
+}
+
+@media (max-width: 800px) {
+  .main-nowPlayingBar-nowPlayingBar { min-height: 72px; }
+  .player-controls__buttons { gap: 2px; }
+  .player-controls__buttons button[data-testid="control-button-playpause"] { width: 38px; height: 38px; }
+  .main-card-card { border-radius: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-card-card, .player-controls__buttons button,
+  #SpicyLyricsPage .LyricsContainer .LyricsContent .line { transition: none !important; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .Root__globalNav, .main-globalNav-container, .main-topBar-container,
+  .main-card-card, .main-home-homeHeader [role="button"] {
+    backdrop-filter: none;
+    background-color: #155d67 !important;
+  }
+}
+
