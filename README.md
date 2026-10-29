@@ -35,5 +35,5 @@ The theme uses native Spotify playback and navigation. Its small script only inj
 
 ## Credits
 
-Visual inspiration: Windows Vista / Windows 7 Aero and Windows Media Player, the supplied Aerify reference image, and the tactile buttons of [Heyclicky](https://www.heyclicky.com/). Spicy Lyrics remains a separate project by its maintainers.
+Visual inspiration: Windows Vista / Windows 7 Aero, Windows Media Player, and the supplied Aerify reference image. Spicy Lyrics remains a separate project by its maintainers.
 
