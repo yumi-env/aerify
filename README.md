@@ -12,7 +12,7 @@ A glassy Windows Vista / Windows 7 inspired Spicetify theme. It gives Spotify a 
 
    ```sh
    spicetify config current_theme Aerify color_scheme Aero
-   spicetify config inject_css 1 replace_colors 1
+   spicetify config inject_css 1 replace_colors 1 inject_theme_js 1
    spicetify apply
    ```
 
@@ -22,15 +22,16 @@ A glassy Windows Vista / Windows 7 inspired Spicetify theme. It gives Spotify a 
 
 Install [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) separately through Spicetify Marketplace. Its full-screen page gets Aerify's frosted background and luminous active line. Its **Spicy Popup Lyrics** button opens the picture-in-picture mini player, which receives the same Aero frame and transport styling. Aerify does not bundle or modify Spicy Lyrics, and lyrics availability depends on that extension and its sources.
 
-Spotify's own mini player receives a best-effort style for its shared controls. Spotify changes its markup between releases, so the Spicy Lyrics popup is the supported lyrics mini player experience for this theme.
+`theme.js` paints both Spicy Lyrics' picture-in-picture window and Spotify's native Document Picture-in-Picture mini player. It runs only when the browser exposes that API. Spotify changes its mini player markup between releases; shared window and button styling is resilient, while finer control styling may need updates.
 
 ## Development
 
 - `color.ini` defines Spicetify's semantic colors.
 - `user.css` styles Spotify and the optional Spicy Lyrics extension.
+- `theme.js` styles separate picture-in-picture windows.
 - `preview/aerify-preview.svg` is a concept illustration for the visual direction, not a screenshot of a live Spotify installation.
 
-The theme uses native Spotify playback and navigation. No JavaScript, external fonts, network calls, or lyric provider credentials are included. CSS selectors may need maintenance after Spotify or Spicy Lyrics updates.
+The theme uses native Spotify playback and navigation. Its small script only injects CSS into picture-in-picture documents. No external fonts, network calls, or lyric provider credentials are included. CSS selectors may need maintenance after Spotify or Spicy Lyrics updates.
 
 ## Credits
 
