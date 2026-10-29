@@ -5,17 +5,17 @@
   const STYLE_ID = "aerify-pip-style";
   const css = `
     :root { color-scheme: dark; }
-    html, body { background: #0b5063 !important; color: #f4fffc !important; font-family: "Segoe UI", Arial, sans-serif !important; }
+    html, body { background: #146f7b !important; color: #f4fffc !important; font-family: "Segoe UI", Arial, sans-serif !important; }
     body::before { content: ""; position: fixed; inset: 0; border: 1px solid rgba(226,255,255,.72); box-shadow: inset 0 1px rgba(255,255,255,.48), inset 0 0 0 4px rgba(26,133,151,.28); border-radius: 8px; pointer-events: none; z-index: 2147483647; }
-    body:not(:has(#SpicyLyricsPage)) { background: linear-gradient(155deg, #278fa2, #0b5265 52%, #082d41) !important; }
+    body:not(:has(#SpicyLyricsPage)) { background: radial-gradient(ellipse at 80% 18%, rgba(150,235,55,.34), transparent 50%), linear-gradient(155deg, #45b4c8, #127d83 52%, #084458) !important; }
     body:not(:has(#SpicyLyricsPage)) button { color: #effffc !important; border-radius: 999px !important; }
     body:not(:has(#SpicyLyricsPage)) button:hover { background: rgba(186,255,239,.19) !important; }
     body:not(:has(#SpicyLyricsPage)) img { border-radius: 5px; box-shadow: 0 2px 10px rgba(0,21,31,.45); }
     body:not(:has(#SpicyLyricsPage)) [data-testid="progress-bar"] { accent-color: #54e3ac; }
-    .spicy-pip-wrapper, .spicy-pip-wrapper #SpicyLyricsPage { background: linear-gradient(155deg, #238a9a, #0b5665 53%, #062e41) !important; }
+    .spicy-pip-wrapper, .spicy-pip-wrapper #SpicyLyricsPage { background: radial-gradient(ellipse at 75% 18%, rgba(150,235,55,.31), transparent 50%), linear-gradient(155deg, #41b3c5, #127c7f 53%, #064458) !important; }
     .spicy-pip-wrapper #SpicyLyricsPage .LyricsContainer .LyricsContent .line.Active { color: #fff !important; text-shadow: 0 1px 3px #063644, 0 0 14px rgba(105,255,219,.56) !important; }
     button:focus-visible, a:focus-visible { outline: 2px solid #d6ff9c !important; outline-offset: 2px; }
-    @media (prefers-reduced-transparency: reduce) { html, body, .spicy-pip-wrapper { background: #0b5063 !important; } }
+    @media (prefers-reduced-transparency: reduce) { html, body, .spicy-pip-wrapper { background: #146f7b !important; } }
   `;
 
   function paint(pipWindow) {
@@ -33,3 +33,52 @@
   }
 })();
 
+/* Show one queued song beside Spotify's own now-playing metadata. No network
+   requests, queue mutations, playback calls, or DOM-wide observers. */
+(() => {
+  const ID = "aerify-up-next";
+  let timer;
+  let retries = 0;
+  let lastText = "";
+
+  function render() {
+    if (document.visibilityState === "hidden") return;
+    const host = document.querySelector('[data-testid="now-playing-bar"], [aria-label="Now playing bar"], .main-nowPlayingBar-nowPlayingBar, .Root__now-playing-bar');
+    const queue = window.Spicetify?.Queue;
+    if (!host || !queue) return;
+
+    let row = document.getElementById(ID);
+    if (!row) {
+      row = document.createElement("div");
+      row.id = ID;
+      row.className = "aerify-up-next";
+      row.setAttribute("aria-label", "Next in queue");
+      row.innerHTML = '<span class="aerify-up-next__label">Up next</span><span class="aerify-up-next__song"></span>';
+      host.appendChild(row);
+      lastText = "";
+    }
+
+    const next = queue.nextTracks?.find((item) => item?.metadata?.title);
+    const title = next?.metadata?.title || "Queue is empty";
+    const artist = next?.metadata?.artist_name;
+    const text = artist ? `${title} · ${artist}` : title;
+    if (text !== lastText) {
+      row.querySelector(".aerify-up-next__song").textContent = text;
+      lastText = text;
+    }
+  }
+
+  function mount() {
+    if (!window.Spicetify?.Player || !document.querySelector('[data-testid="now-playing-bar"], [aria-label="Now playing bar"], .main-nowPlayingBar-nowPlayingBar, .Root__now-playing-bar')) {
+      if (retries++ < 60) setTimeout(mount, 500);
+      return;
+    }
+    render();
+    window.Spicetify.Player.addEventListener("songchange", render);
+    document.addEventListener("visibilitychange", render);
+    timer = setInterval(render, 15000);
+    window.addEventListener("pagehide", () => clearInterval(timer), { once: true });
+  }
+
+  mount();
+})();
