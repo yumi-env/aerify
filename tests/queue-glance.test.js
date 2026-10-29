@@ -4,19 +4,21 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
-test('queue glance uses player-state tracks when Queue is empty', () => {
+const code = fs.readFileSync(path.join(__dirname, '..', 'theme.js'), 'utf8');
+
+function setup(queueTracks = [], playerTracks = [], nowPlayingPanel = null) {
   const song = { textContent: '' };
   const artist = { textContent: '' };
-  const host = {};
+  const attributes = {};
   const body = { card: null, appendChild(card) { this.card = card; } };
   const document = {
     body,
     visibilityState: 'visible',
-    querySelector() { return host; },
+    querySelector(selector) { return selector.includes('Now playing view') ? nowPlayingPanel : {}; },
     getElementById() { return body.card; },
     createElement() {
       return {
-        setAttribute() {},
+        setAttribute(key, value) { attributes[key] = value; },
         querySelector(selector) { return selector.endsWith('__song') ? song : artist; },
         remove() { body.card = null; },
       };
@@ -24,25 +26,87 @@ test('queue glance uses player-state tracks when Queue is empty', () => {
     addEventListener() {},
   };
   const callbacks = {};
+  const player = {
+    data: { next_tracks: playerTracks },
+    addEventListener(name, callback) { callbacks[name] = callback; },
+    play() { throw new Error('theme must never start playback'); },
+    pause() { throw new Error('theme must never alter playback'); },
+  };
   const window = {
-    Spicetify: {
-      Queue: { nextTracks: [] },
-      Player: {
-        data: { next_tracks: [{ metadata: { title: 'Next Song', artist_name: 'Artist' } }] },
-        addEventListener(name, callback) { callbacks[name] = callback; },
-      },
-    },
+    Spicetify: { Queue: { nextTracks: queueTracks }, Player: player },
     addEventListener() {},
   };
-  const code = fs.readFileSync(path.join(__dirname, '..', 'theme.js'), 'utf8');
-  vm.runInNewContext(code, { window, document, setInterval() {}, setTimeout() {} });
+  vm.runInNewContext(code, { window, document, setInterval() {}, setTimeout() {}, fetch() { throw new Error('theme must not fetch'); } });
+  return { window, body, song, artist, attributes, callbacks };
+}
 
-  assert.equal(song.textContent, 'Next Song');
-  assert.equal(artist.textContent, 'Artist');
-  window.Spicetify.Player.data.next_tracks = [{ metadata: { title: 'Another Song' } }];
-  callbacks.songchange();
-  assert.equal(song.textContent, 'Another Song');
-  window.Spicetify.Player.data.next_tracks = [];
-  callbacks.songchange();
-  assert.equal(body.card, null);
+test('queue card falls back to automatic player-state track and disappears when none exists', () => {
+  const state = setup([], [{ metadata: { title: 'Next Song', artist_name: 'Artist' } }]);
+  assert.equal(state.song.textContent, 'Next Song');
+  assert.equal(state.artist.textContent, 'Artist');
+  assert.equal(state.attributes.role, 'status');
+  assert.equal(state.attributes['aria-label'], 'Up next: Next Song · Artist');
+
+  state.window.Spicetify.Player.data.next_tracks = [{ metadata: { title: 'Another Song' } }];
+  state.callbacks.songchange();
+  assert.equal(state.song.textContent, 'Another Song');
+  state.window.Spicetify.Player.data.next_tracks = [];
+  state.callbacks.songchange();
+  assert.equal(state.body.card, null);
+});
+
+test('explicit queue takes priority and nested or context tracks are normalized', () => {
+  const state = setup(
+    [{ track: { name: 'Queued Song', artists: [{ name: 'First' }, { name: 'Second' }] } }],
+    [{ metadata: { title: 'Automatic Song', artist_name: 'Auto Artist' } }],
+  );
+  assert.equal(state.song.textContent, 'Queued Song');
+  assert.equal(state.artist.textContent, 'First, Second');
+
+  state.window.Spicetify.Queue.nextTracks = [{ invalid: true }];
+  state.callbacks.songchange();
+  assert.equal(state.song.textContent, 'Automatic Song');
+});
+
+test('no card is shown for an empty or unresolved next track', () => {
+  const state = setup([{ metadata: {} }], [{ metadata: {} }]);
+  assert.equal(state.body.card, null);
+});
+
+test('visible Now Playing next-in-queue row fills an empty API snapshot', () => {
+  const group = {
+    querySelector(selector) {
+      return selector.includes('/track/') ? { textContent: 'I Feel It Coming' } : null;
+    },
+    querySelectorAll() { return [{ textContent: 'The Weeknd' }, { textContent: 'Daft Punk' }]; },
+  };
+  const section = { querySelector() { return group; } };
+  const heading = { textContent: 'Next in queue', closest() { return section; } };
+  const panel = { querySelectorAll() { return [heading]; } };
+  const state = setup([], [], panel);
+  assert.equal(state.song.textContent, 'I Feel It Coming');
+  assert.equal(state.artist.textContent, 'The Weeknd, Daft Punk');
+});
+
+test('Picture-in-Picture receives one scoped Aero stylesheet', () => {
+  const styles = [];
+  const pipDoc = {
+    head: { appendChild(style) { styles.push(style); } },
+    getElementById(id) { return styles.find((style) => style.id === id); },
+    createElement() { return {}; },
+  };
+  let onEnter;
+  const documentPictureInPicture = {
+    window: { document: pipDoc },
+    addEventListener(name, callback) { if (name === 'enter') onEnter = callback; },
+  };
+  const window = { documentPictureInPicture };
+  const document = { querySelector() { return null; } };
+  vm.runInNewContext(code, { window, document, documentPictureInPicture, setTimeout() {} });
+  assert.equal(styles.length, 1);
+  assert.match(styles[0].textContent, /#43bdd2/);
+  assert.match(styles[0].textContent, /#SpicyLyricsPage \.LyricsContainer/);
+  assert.match(styles[0].textContent, /prefers-reduced-transparency/);
+  onEnter({ window: { document: pipDoc } });
+  assert.equal(styles.length, 1);
 });
