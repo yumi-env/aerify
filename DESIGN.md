@@ -8,12 +8,13 @@ Recreate the feeling of opening a polished Vista/Windows 7 music player: a brigh
 
 | Role | Value | Use |
 | --- | --- | --- |
-| Shell cyan | `#52bdd5` | Top frame and window light |
-| Deep teal | `#0d706d` | Main listening surface |
-| Transport black | `#07191d` | Playback deck |
-| Primary text | `#f4fffc` | Labels and metadata |
-| Muted text | `#b6dbd8` | Secondary metadata |
-| Play green | `#64e3af` | Primary playback action and progress |
+| Shell cyan | `#43bdd2` | Top frame and window light |
+| Emerald | `#064b3f` | Main listening surface |
+| Sidebar teal | `#196b70` | Library surface |
+| Transport black | `#071714` | Playback deck |
+| Primary text | `#f4fff8` | Labels and metadata |
+| Muted text | `#b8d8ce` | Secondary metadata |
+| Play green | `#1dbb80` | Primary playback action and progress |
 | Focus lime | `#d6ff9c` | Keyboard focus ring |
 
 `color.ini` also provides an `Aero Blue` alternate scheme. Glass overlays use translucent white and teal above these opaque bases. Text stays opaque for readability.
@@ -21,7 +22,7 @@ Recreate the feeling of opening a polished Vista/Windows 7 music player: a brigh
 ## Geometry and material
 
 - Frame: fine bright top edge and darker recessed bottom edge; the simulated glass is confined to shell, tiles, controls, and the mini player.
-- Cards: 10px radius, thin pale border, modest offset shadow, inset highlight.
+- Cards: compact glass rectangles, thin pale border, modest offset shadow, inset highlight.
 - Navigation: mostly 5px radius, compact, with a glowing green-teal selected state.
 - Transport: dark continuous strip with a 44px round play control and recessed progress track.
 - Queue glance: a compact glass card above the bottom-left transport area, visible only while a next song is known.
