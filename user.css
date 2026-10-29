@@ -89,6 +89,32 @@ nav[aria-label="Your Library"] :is(button,a,[role="row"]):hover {
     0 3px 8px rgba(0,27,30,.36) !important;
 }
 #main main :is(h1,h2,h3) {color:#f8fffb;text-shadow:0 1px 2px rgba(0,28,27,.65)}
+/* The current Home shortcuts default to two long columns. At a regular
+   desktop width, use four compact Aero strips so music shelves arrive sooner. */
+[data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l {
+  --item-height:58px;margin-bottom:8px !important;
+}
+@container (width >= 680px) {
+  [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed {
+    --item-height:58px;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    grid-template-rows:repeat(2,58px) !important;
+    grid-auto-rows:58px !important;
+    gap:8px !important;
+  }
+}
+@container (width >= 510px) and (width < 680px) {
+  [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed {
+    --item-height:56px;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:8px !important;
+  }
+}
+/* Spotify's optional onboarding checklist occupies the first music shelf.
+   Its navigation is unrelated to playback, so omit this promo from Home. */
+[data-testid="home-page"] section.ycB7IQtWxiABRYSRVxp5 {
+  display:none !important;
+}
 /* Spotify's shortcut has a direct shortcut-background child. Paint that
    container rather than its nested text link. */
 [data-testid="home-page"] div:has(> [data-testid="shortcut-background"]) {
@@ -98,6 +124,14 @@ nav[aria-label="Your Library"] :is(button,a,[role="row"]):hover {
   box-shadow:inset 0 1px rgba(245,255,249,.65),inset 0 -1px rgba(0,25,24,.76),
     0 2px 7px rgba(0,18,20,.4) !important;
   transition:border-color .16s ease,box-shadow .16s ease;
+}
+[data-testid="home-page"] .CcRlyOo0u4fhd31I7iZq {
+  background:linear-gradient(180deg,rgba(189,248,220,.33) 0%,rgba(54,142,105,.35) 47%,
+    rgba(1,61,45,.76) 48%,rgba(0,44,37,.82) 100%) !important;
+  border:1px solid rgba(220,255,238,.69) !important;
+  border-radius:4px !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.53),
+    inset 0 -1px rgba(0,26,24,.73),0 2px 6px rgba(0,21,22,.41) !important;
 }
 [data-testid="home-page"] div:has(> [data-testid="shortcut-background"]):hover {
   border-color:rgba(230,255,244,.84) !important;
@@ -112,7 +146,7 @@ nav[aria-label="Your Library"] :is(button,a,[role="row"]):hover {
   color:#f3fff9 !important;background:rgba(1,54,44,.55) !important;
   border:1px solid rgba(205,255,231,.5) !important;
   box-shadow:inset 0 1px rgba(255,255,255,.22),0 2px 5px rgba(0,25,23,.34) !important;
-  opacity:.2;transform:scale(.82);
+  opacity:.38;transform:scale(.78);
   transition:opacity .15s ease,transform .15s ease,background .15s ease;
 }
 [data-testid="home-page"] div:has(> [data-testid="shortcut-background"]):is(:hover,:focus-within) button,
@@ -125,20 +159,6 @@ nav[aria-label="Your Library"] :is(button,a,[role="row"]):hover {
 }
 img[data-testid="shortcut-image"] {
   border:1px solid rgba(229,255,242,.47);border-radius:3px !important;
-}
-/* Spotify 2.45's own shortcut grid: keep its links and ordering, but use
-   Media Center density when the content pane has enough room. */
-@container (width >= 840px) {
-  [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed {
-    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-    gap:10px !important;
-  }
-}
-@container (580px <= width < 840px) {
-  [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed {
-    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-    gap:10px !important;
-  }
 }
 /* Right panel and table rows get inset treatment. */
 #Desktop_PanelContainer_Id,.s8fIIxwITjOk1aFOxhPv {
