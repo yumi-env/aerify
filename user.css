@@ -557,33 +557,61 @@ main h1, main h2, main h3 {
   background: linear-gradient(160deg, #43b5c8, #106b7c 53%, #063e5a) !important;
 }
 
-/* Queue glance sits below the current track, without moving Spotify controls. */
-[data-testid="now-playing-bar"], [aria-label="Now playing bar"], .main-nowPlayingBar-nowPlayingBar,
-.Root__now-playing-bar { position: relative; }
+/* A separate glass card appears only when a next track is known. */
 .aerify-up-next {
-  position: absolute;
-  left: 80px;
-  right: 10px;
-  bottom: 5px;
+  position: fixed;
+  left: 14px;
+  bottom: 94px;
+  z-index: 200;
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 11px;
+  width: min(286px, calc(100vw - 28px));
+  min-height: 66px;
   min-width: 0;
-  color: #ccebe1;
-  font: 10.5px/1.3 var(--aero-font);
-  white-space: nowrap;
+  padding: 9px 12px;
+  color: #f4fffb;
+  background: linear-gradient(180deg, rgba(149,238,241,.96), rgba(46,152,163,.97) 11%, rgba(10,91,99,.98) 51%, rgba(5,57,68,.98) 100%);
+  border: 1px solid rgba(224,255,253,.89);
+  border-radius: 9px;
+  box-shadow: inset 0 1px rgba(255,255,255,.73), inset 0 -1px rgba(0,40,51,.58), 0 6px 18px rgba(0,20,28,.48);
+  font: 12px/1.25 var(--aero-font);
   pointer-events: none;
 }
-.aerify-up-next__label {
+.aerify-up-next__icon {
   flex: none;
-  color: #9cf4c7;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #eafff4, #9ef6c7 36%, #30c58e 52%, #086a53);
+  border: 1px solid #c8ffe5;
+  box-shadow: inset 0 1px #fff, 0 1px 5px rgba(0,25,31,.6);
+}
+.aerify-up-next__icon::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 11px 0 0 15px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 11px solid #0a5848;
+}
+.aerify-up-next__details { display: grid; gap: 2px; min-width: 0; }
+.aerify-up-next__label {
+  color: #c9ffe3;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: .08em;
 }
-.aerify-up-next__song {
+.aerify-up-next__song, .aerify-up-next__artist {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
+.aerify-up-next__song { font-weight: 700; }
+.aerify-up-next__artist { color: #c4e9e4; font-size: 11px; }
 
 /* A per-card blur forces costly repaints while scrolling. The translucent
    gradient preserves the glass look with the main surface painted once. */
@@ -592,7 +620,11 @@ main h1, main h2, main h3 {
 }
 
 @media (max-width: 1000px) {
-  .aerify-up-next { left: 75px; font-size: 10px; }
+  .aerify-up-next { width: min(245px, calc(100vw - 28px)); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .aerify-up-next { background: #105d68; }
 }
 
 @media (prefers-reduced-transparency: reduce) {
