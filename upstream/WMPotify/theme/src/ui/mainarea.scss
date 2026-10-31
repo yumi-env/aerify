@@ -1,0 +1,321 @@
+:root[data-wmpotify-style="aero"],
+:root[data-wmpotify-style="xp"] {
+    background: transparent;
+}
+
+:root[data-wmpotify-style="xp"][data-wmpotify-title-style="native"] {
+    background: black;
+}
+
+:root[data-wmpotify-dark-mode] {
+    .Root__main-view {
+        background: #2e2e2e;
+
+        .main-topBar-container {
+            background: #222222;
+        }
+
+        .marketplace-header {
+            background: #2e2e2e;
+        }
+    }
+}
+
+.Root__top-container {
+    background: transparent;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: calc(100% - var(--player-bar-height));
+        background-color: var(--wmp11-window);
+    }
+}
+
+.Root__main-view {
+    width: calc(100% + var(--panel-gap));
+
+    /* 1.2.55 compatibility */
+    > div:first-child:not(.main-view-container) {
+        height: 100%;
+    }
+}
+
+body.sidebar-open .Root__main-view {
+    width: calc(100% + var(--panel-gap) - 3px);
+}
+
+body[data-hide-libx],
+:root:fullscreen {
+    #Desktop_LeftSidebar_Id {
+        display: none;
+    }
+
+    .Root__main-view {
+        margin-left: calc(var(--panel-gap) * -2);
+        width: calc(100% + var(--panel-gap) * 3);
+    }
+}
+
+body[data-hide-libx].sidebar-open,
+:root:fullscreen body.sidebar-open {
+    .Root__main-view {
+        width: calc(100% + var(--panel-gap) * 3 - 3px);
+    }
+}
+
+.Root__main-view {
+    border-radius: 0 !important;
+
+    .main-topBar-container {
+        position: relative;
+        width: 100%;
+        height: 28px;
+        border-bottom: solid 1px var(--wmp11-separator-shadow);
+        outline: solid 1px var(--wmp11-separator-light);
+        overflow: visible;
+
+        &:has(> .contentSpacing > .main-topBar-topbarContentWrapper:empty) {
+            display: none;
+        }
+
+        &:has(> .contentSpacing > div > div > span.main-entityHeader-topbarTitle) {
+            position: absolute;
+            width: calc(100% - var(--scrollbar-size));
+            outline: none;
+
+            &:not(:has(> .contentSpacing > div > .main-entityHeader-topbarContentFadeIn)) {
+                display: none;
+            }
+        }
+
+        nav ul {
+            display: flex;
+        }
+
+        &:has(> .main-topBar-background[style*="opacity: 1"]) {
+            display: flex !important;
+        }
+
+        .main-topBar-background {
+            background: var(--wmp11-window) !important;
+        }
+
+        .main-topBar-overlay {
+            opacity: 0;
+        }
+    }
+}
+
+/* Make the top bar visible when the theme failed to init because of missing global nav */
+/* to allow users to access the account button and experimental features */
+:root[data-wmpotify-no-global-nav] {
+    .main-topBar-container {
+        display: flex !important;
+    }
+}
+
+.marketplace-header {
+    top: 12px;
+}
+
+.Root__right-sidebar {
+    margin-right: calc(var(--panel-gap) * -1);
+
+    /* For Peek NPV */
+    > div:first-child,
+    > div:first-child > div:first-child,
+    > div:first-child > div:first-child > div {
+        border-radius: 0 !important;
+    }
+
+    aside {
+        animation: appear 8s !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+
+        &::before {
+            background: transparent !important;
+        }
+
+        &[data-identifier="spotify-queue-panel"] {
+            animation: none !important;
+        }
+
+        div[data-testid="PanelHeader_CloseButton"] button {
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: 6px;
+            right: 12px;
+            border-radius: 0;
+            background: url('resources/sidebar/sbclose.png') no-repeat;
+            transform: none !important;
+    
+            svg {
+                display: none;
+            }
+        }
+    }
+
+    div {
+        transition: none !important;
+    }
+
+    .LayoutResizer__resize-bar.LayoutResizer__inline-start {
+        opacity: 1 !important;
+        width: 3px;
+        inset-inline-start: -3px;
+        border-left: solid 1px var(--wmp11-window);
+        background-color: var(--wmp11-separator-shadow);
+        border-right: solid 1px var(--wmp11-separator-light);
+        cursor: ew-resize;
+    
+        &::after {
+            display: none;
+        }
+    }
+
+    > div:empty + .LayoutResizer__resize-bar.LayoutResizer__inline-start {
+        display: none;
+    }
+}
+
+:root[data-wmpotify-init-complete],
+:root[data-wmpotify-js-fail] {
+    .Root__right-sidebar aside {
+        animation: none !important;
+    }
+}
+
+.Root {
+    --main-area-right: 0px;
+}
+
+body.sidebar-open .Root {
+    --main-area-right: calc(var(--panel-width, var(--right-sidebar-width)) * 1px + 3px);
+}
+
+.main-loadingIndicator-loadingIcon {
+    width: 32px;
+    height: 32px;
+    background: url('resources/icon/spinner.webp') no-repeat;
+
+    svg {
+        display: none;
+    }
+}
+
+.BeautifulLyricsBackground {
+    border-radius: 0 !important;
+    overflow: hidden !important;
+
+    &-Container {
+        border-radius: 0 !important;
+    }
+}
+
+:root[data-wmpotify-style="xp"] {
+    /* Add panel gaps again to show frames there */
+    /* And extra 8px on the left if LibX is shown */
+    .Root__main-view {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .Root {
+        --main-area-right: var(--panel-gap);
+    }
+
+    body.sidebar-open .Root {
+        --main-area-right: calc(var(--panel-width, var(--right-sidebar-width)) * 1px + var(--panel-gap) + 3px);
+
+        .Root__main-view {
+            width: calc(100% + var(--panel-gap) - 3px);
+        }
+    }
+
+    .Root__globalNav {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    #Desktop_LeftSidebar_Id {
+        margin-left: var(--panel-gap);
+    }
+
+    .Root__right-sidebar {
+        margin-right: 0;
+    }
+
+    body[data-hide-libx] {
+        .Root__main-view {
+            margin-left: calc(var(--panel-gap) * -1);
+            width: calc(100% + var(--panel-gap) * 1);
+        }
+
+        &.sidebar-open .Root__main-view {
+            width: calc(100% + var(--panel-gap) * 2 - 3px);
+        }
+    }
+
+    &:fullscreen {
+        .Root__main-view {
+            margin-left: calc(var(--panel-gap) * -2) !important;
+            width: calc(100% + var(--panel-gap) * 3) !important;
+        }
+
+        body.sidebar-open .Root__main-view {
+            width: calc(100% + var(--panel-gap) * 3 - 3px) !important;
+        }
+    }
+}
+
+@media (max-width: 360px) { /* HiDPI/Zoom errors on 358px */
+    #Desktop_LeftSidebar_Id {
+        display: none;
+    }
+
+    .Root__main-view {
+        margin-left: calc(var(--panel-gap) * -2);
+        width: calc(100% + var(--panel-gap) * 3);
+    }
+
+    body.sidebar-open {
+        .Root__main-view {
+            display: none;
+        }
+
+        .Root__right-sidebar {
+            margin-left: calc(var(--panel-gap) * -3) !important;
+
+            .XOawmCGZcQx4cesyNfVO,
+            .oXO9_yYs6JyOwkBn8E4a, /* 1.2.72+ */
+            .zjCIcN96KsMfWwRo, /* 1.2.86+ */
+            .main-nowPlayingView-container { /* 1.2.86+, someone mapped this */
+                width: 358px !important;
+            }
+        }
+    }
+
+    :root[data-wmpotify-style="xp"] {
+        .Root__main-view {
+            margin-left: calc(var(--panel-gap) * -1);
+            width: calc(100% + var(--panel-gap) * 1);
+        }
+
+        body.sidebar-open .Root__right-sidebar {
+            margin-left: calc(var(--panel-gap) * -2) !important;
+
+            .XOawmCGZcQx4cesyNfVO,
+            .oXO9_yYs6JyOwkBn8E4a, /* 1.2.72+ */
+            .zjCIcN96KsMfWwRo, /* 1.2.86+ */
+            .main-nowPlayingView-container { /* 1.2.86+, someone mapped this */
+                width: 342px !important;
+            }
+        }
+    }
+}

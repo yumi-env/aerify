@@ -1,0 +1,149 @@
+.main-home-homeHeader {
+    background: transparent !important;
+}
+
+.main-home-filterChipsSection {
+    background: var(--wmp11-window) !important;
+
+    &::after {
+        background: var(--wmp11-window) !important;
+    }
+
+    & + div {
+        .uMoqkRWisfbVwPoJgD6N, /* subcategory buttons */
+        .pDejgs2MAbpWS64_ { /* 1.2.86+ */
+            background: var(--wmp11-window) !important;
+            margin-inline-start: -8px;
+        }
+    }
+}
+
+.main-home-content {
+    .view-homeShortcutsGrid-shortcut {
+        border: solid 1px transparent;
+        border-radius: 3px;
+
+        &:hover {
+            background: var(--item-hover-background);
+            border-color: var(--item-hover-border);
+        }
+
+        &:focus-within {
+            background: var(--item-selection-background);
+            border-color: var(--item-active-border);
+        }
+
+        &:hover:focus-within {
+            background: var(--item-selection-hover-background);
+            border-color: var(--item-selection-hover-border);
+        }
+
+        .view-homeShortcutsGrid-imageContainer {
+            padding: 4px;
+            margin-top: -1px;
+
+            .view-homeShortcutsGrid-imageWrapper {
+                box-shadow: var(--album-shadow-small);
+            }
+        }
+
+        &:hover,
+        &:focus-within {
+            .view-homeShortcutsGrid-PlayButtonContainer button {
+                background: var(--play) center / cover no-repeat;
+                border-radius: 0;
+    
+                &:hover {
+                    background-image: var(--play-hover);
+                }
+    
+                &:active {
+                    background-image: var(--play-pressed);
+                }
+    
+                span {
+                    opacity: 0;
+                }
+
+                &:has(path[d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7H2.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-2.6z"]),
+                &:has(path[d="M5.7 3a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7H5.7zm10 0a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7h-2.6z"]),
+                &:has(path[d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7z"]),
+                &:has(path[d="M5.7 3a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7zm10 0a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7z"]) {
+                    background-image: var(--pause) !important;
+    
+                    &:hover {
+                        background-image: var(--pause-hover) !important;
+                    }
+    
+                    &:active {
+                        background-image: var(--pause-pressed) !important;
+                    }
+                }
+            }
+        }
+    }
+
+    /* Picked for you, etc. */
+    section:not(.main-shelf-shelfGrid):not(.view-homeShortcutsGrid-shortcuts) {
+        a[class*="PromotionDefaultNative-"] {
+            border: solid 1px transparent;
+            border-radius: 3px;
+
+            &::after {
+                display: none;
+            }
+
+            &:hover {
+                background: var(--item-hover-background);
+                border-color: var(--item-hover-border);
+            }
+
+            div[class*="PromotionDefaultNative-module_image-container"],
+            div[class*="PromotionDefaultNativeImage-module_image-container"] {
+                border-radius: 0;
+                box-shadow: var(--album-shadow-big);
+            }
+
+            div[class*="PromotionDefaultNative-module_footer-area"] {
+                > span[data-encore-id="overlayTrigger"]:first-child {
+                    button {
+                        background: var(--play) center / cover no-repeat;
+                        border-radius: 0;
+        
+                        &:hover {
+                            background-image: var(--play-hover);
+                        }
+        
+                        &:active {
+                            background-image: var(--play-pressed);
+                        }
+        
+                        span {
+                            opacity: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (forced-colors: active) {
+    .main-home-content {
+        .view-homeShortcutsGrid-shortcut:hover a {
+            color: var(--hilight-text);
+            background-color: var(--hilight);
+            forced-color-adjust: none;
+        }
+
+        section:not(.main-shelf-shelfGrid):not(.view-homeShortcutsGrid-shortcuts) {
+            a[class*="PromotionDefaultNative-"]:hover {
+                [class*=encore-text] {
+                    color: HighlightText !important;
+                    background-color: Highlight !important;
+                    forced-color-adjust: none;
+                }
+            }
+        }
+    }
+}

@@ -1,326 +1,393 @@
-/* Aerify: Windows Vista/7 Aero paint. Spotify owns navigation and playback. */
+/* Aerify main Spotify window. Adapted from WMPotify's MIT-licensed
+   theme/src source at commit 6aa2b5f. See THIRD_PARTY_NOTICES.md.
+   Native Spotify navigation, playback, focus order and handlers are retained. */
 :root {
-  --aero-shell:#43bdd2; --aero-emerald:#064b3f; --aero-side:#196b70;
-  --aero-deck:#071714; --aero-play:#1dbb80; --aero-ink:#f4fff8;
-  --aero-muted:#b8d8ce; --aero-focus:#d6ff9c;
-  --aero-font:"Segoe UI","Trebuchet MS",Arial,sans-serif;
-  --background-base:#064b3f; --background-elevated-base:#135d55;
-  --background-highlight:#1c7668; --background-tinted-base:#195d58;
-  --text-base:#f4fff8; --text-subdued:#b8d8ce;
-  --essential-base:#f4fff8; --essential-subdued:#b8d8ce;
-  --interactive-base:#1dbb80; --interactive-hover:#5de1a9;
-  --spice-main:#1dbb80; --spice-text:#f4fff8; --spice-subtext:#b8d8ce;
+  --aerify-font:"Segoe UI","Trebuchet MS",Arial,sans-serif;
+  --aerify-text:var(--spice-text,#e0e4ec);
+  --aerify-muted:var(--spice-subtext,#aab7c0);
+  --aerify-green:var(--spice-button,#1cab79);
+  --aerify-focus:#d6ff9c;
+  --aerify-shadow:#090e12;
+  /* WMPotify variables.scss: Aero control faces and WMP11 separators. */
+  --button-gradient:linear-gradient(to bottom,#f2f2f2 45%,#ebebeb 45%,#cfcfcf);
+  --button-gradient-hovered:linear-gradient(to bottom,#eaf6fd 45%,#bee6fd 45%,#a7d9f5);
+  --button-gradient-active:linear-gradient(to bottom,#e5f4fc,#c4e5f6 30% 50%,#98d1ef 50%,#68b3db);
+  --button-border-color:#8e8f8f;
+  --button-border-color-hovered:#3c7fb1;
+  --button-border-color-active:#6d91ab;
+  --button-border-color-disabled:#aeb2b5;
+  --button-shadow:inset 0 0 0 1px #fffc;
+  --button-shadow-active:inset 1px 1px 0 #0003,inset -1px 1px 0 #0001;
+  --wmp11-separator-shadow:#a9b7c9;
+  --wmp11-separator-light:#f2f7fc;
+  --background-base:#222;
+  --background-elevated-base:#2a3035;
+  --background-highlight:#363e43;
+  --background-tinted-base:#2b3439;
+  --text-base:#e0e4ec;
+  --text-subdued:#aab7c0;
+  --interactive-base:#1cab79;
+  --interactive-hover:#70e9b3;
   color-scheme:dark;
 }
-html,body,#main {color:var(--aero-ink);background:#07534f;font-family:var(--aero-font)}
-body::after {
-  content:"";position:fixed;inset:0;z-index:2147483000;pointer-events:none;
-  border:10px solid #43bdd2;
-  border-top-color:#90ecf8;
-  border-right-color:#168da6;
-  border-bottom-color:#0b6781;
-  box-shadow:inset 0 0 0 2px #e3ffff,inset 0 0 0 5px rgba(5,75,91,.75),
-    inset 0 8px 13px rgba(255,255,255,.23),0 0 0 1px #063c4c;
+html,body,#main {
+  color:var(--aerify-text);
+  background:#222;
+  font-family:var(--aerify-font);
 }
-body::before {
-  content:"";position:fixed;inset:0 10px auto;z-index:2147482999;
-  height:12px;pointer-events:none;
-  background:linear-gradient(180deg,rgba(255,255,255,.43),rgba(255,255,255,.10) 68%,transparent);
+/* WMPotify ui/topbar.scss: a dark Aero navigation strip. Spotify still
+   supplies the Home, Search, history and account controls. */
+#global-nav-bar {
+  background:linear-gradient(180deg,#657986 0%,#2c455c 18%,#192b47 48%,
+    #10233e 49%,#06192f 100%) !important;
+  border-bottom:1px solid #020e20 !important;
+  box-shadow:inset 0 1px #c3dce4,inset 0 -1px #7e9baa,
+    0 2px 5px #0007 !important;
 }
-/* Convex cyan window chrome retains Spotify's native controls and order. */
-#global-nav-bar,[data-testid="global-nav"] {
-  background:linear-gradient(180deg,#d3fdff 0%,#82e6f3 8%,#4bc5de 36%,#1ca0bd 49%,
-    #1685a2 50%,#0b6482 87%,#084b65 100%) !important;
-  border-bottom:1px solid #dbffff !important;
-  box-shadow:inset 0 1px #fff,inset 0 -2px rgba(0,47,66,.7),
-    0 4px 9px rgba(0,26,37,.48) !important;
+#global-nav-bar :is(button,a):hover {
+  box-shadow:inset 0 1px #e2f5ff55;
 }
-#global-nav-bar :is(button,[role="button"]) {color:#f3ffff}
-#global-nav-bar button:hover {
-  background:linear-gradient(180deg,rgba(240,255,255,.34),rgba(0,58,77,.18)) !important;
-  box-shadow:inset 0 1px rgba(255,255,255,.5);
+/* WMPotify controls/search.scss: 225x24 search recess, white inner face,
+   a double border and 12px italic placeholder. */
+#global-nav-bar form[role="search"] {
+  box-sizing:border-box;
+  width:225px;
+  height:24px;
+  margin:2px;
+  border:1px solid #f4f7fc;
+  background:linear-gradient(#5e5f61,#c0c3c6);
 }
-input[placeholder*="What do you want to play"],#global-nav-bar input {
-  color:#143d48 !important;background:linear-gradient(180deg,#f8ffff,#dceef0) !important;
-  border:1px solid #8db8c3 !important;border-radius:6px !important;
-  box-shadow:inset 0 1px 3px rgba(15,77,97,.26),0 1px rgba(255,255,255,.68) !important;
+#global-nav-bar input:is([data-top-bar-search],[role="searchbox"]) {
+  box-sizing:border-box;
+  width:calc(100% - 2px);
+  height:20px !important;
+  min-height:0 !important;
+  margin:1px;
+  padding:0 4px;
+  border:1px solid #fff !important;
+  border-radius:0 !important;
+  background:#f6f9fc !important;
+  box-shadow:none !important;
+  color:#263944 !important;
+  font:12px var(--aerify-font);
 }
-input[placeholder*="What do you want to play"]::placeholder {color:#477781 !important;opacity:1}
-/* Current Spotify 2.45 search wrapper; the input remains in its native slot. */
-#global-nav-bar .oxFroaXCJTMXfoZDaaf1 {max-width:440px}
-/* The library is a darker, beveled Aero pane. */
-nav[aria-label="Main"],nav[aria-label="Your Library"],#Desktop_LeftSidebar_Id {
-  background:linear-gradient(155deg,#359b9b 0%,#1d7777 20%,#0c555d 64%,#073b47 100%) !important;
-  border-right:1px solid rgba(211,255,251,.72) !important;
-  border-radius:8px 3px 3px 8px;
-  box-shadow:inset 1px 0 rgba(255,255,255,.48),inset -2px 0 rgba(0,41,52,.48),
-    inset 0 2px rgba(227,255,252,.28) !important;
+#global-nav-bar input::placeholder {
+  color:#687c86 !important;
+  font-style:italic;
+  opacity:1;
 }
-nav[aria-label="Main"] :is([aria-current="page"],[aria-selected="true"]),
-nav[aria-label="Your Library"] :is([aria-current="page"],[aria-selected="true"]) {
+#global-nav-bar .oxFroaXCJTMXfoZDaaf1 {max-width:235px}
+/* WMPotify controls/aero/button.scss: hover and active faces are layered
+   pseudo-elements, with separate border, disabled and focus states. */
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i]),
+#main-view button[aria-pressed] {
+  box-sizing:border-box;
+  position:relative;
+  z-index:0;
+  isolation:isolate;
+  background:var(--button-gradient) !important;
+  color:#222 !important;
+  border:1px solid var(--button-border-color) !important;
+  border-radius:3px !important;
+  box-shadow:var(--button-shadow) !important;
+}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i]) {
+  width:29px;
+  height:29px;
+  border-radius:50% !important;
+}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i])::before,
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i])::after,
+#main-view button[aria-pressed]::before,
+#main-view button[aria-pressed]::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  border-radius:inherit;
+  opacity:0;
+  transition:opacity .2s;
+  pointer-events:none;
+}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i])::before,
+#main-view button[aria-pressed]::before {
+  background:var(--button-gradient-hovered);
+  box-shadow:var(--button-shadow);
+}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i])::after,
+#main-view button[aria-pressed]::after {
+  background:var(--button-gradient-active);
+  box-shadow:var(--button-shadow-active);
+}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i]):hover:not(:disabled),
+#main-view button[aria-pressed]:hover:not(:disabled) {
+  border-color:var(--button-border-color-hovered) !important;
+}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i]):hover:not(:disabled)::before,
+#main-view button[aria-pressed]:hover:not(:disabled)::before {opacity:1}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i]):active,
+#main-view button[aria-pressed]:active {
+  border-color:var(--button-border-color-active) !important;
+}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i]):active::after,
+#main-view button[aria-pressed]:active::after {opacity:1}
+#global-nav-bar button:is([aria-label*="back" i],[aria-label*="forward" i]):disabled,
+#main-view button[aria-pressed]:disabled {
+  background:#f4f4f4 !important;
+  border-color:var(--button-border-color-disabled) !important;
+  color:#838383 !important;
+}
+/* WMPotify panels/libx.scss: compact sidebar, a 29px ruled header and
+   25px list items. max-width keeps Spotify's collapsed width untouched. */
+#Desktop_LeftSidebar_Id,nav[aria-label="Main"] {
+  background:linear-gradient(155deg,#29333b,#20282e 48%,#18222c) !important;
+  color:var(--aerify-text);
+  border-right:1px solid var(--wmp11-separator-light) !important;
+  box-shadow:inset -1px 0 var(--wmp11-separator-shadow),
+    inset 1px 0 #b7cbd529 !important;
+}
+#Desktop_LeftSidebar_Id {max-width:190px}
+#Desktop_LeftSidebar_Id header:first-of-type {
+  height:29px;
+  border-bottom:1px solid var(--wmp11-separator-shadow);
+  outline:1px solid var(--wmp11-separator-light);
+  overflow:hidden;
+}
+#Desktop_LeftSidebar_Id [role="row"] {
+  max-height:32px;
+  border-bottom:1px solid #39444a;
+  overflow:hidden;
+}
+#Desktop_LeftSidebar_Id [role="row"] img {width:25px;height:25px;object-fit:cover}
+#Desktop_LeftSidebar_Id :is([aria-current="page"],[aria-selected="true"]),
+nav[aria-label="Main"] :is([aria-current="page"],[aria-selected="true"]) {
   color:#fff !important;
-  background:linear-gradient(180deg,rgba(94,224,182,.58),rgba(6,127,109,.60) 51%,rgba(1,84,79,.7)) !important;
-  border:1px solid rgba(201,255,234,.45);border-radius:5px !important;
-  box-shadow:inset 0 1px rgba(255,255,255,.56),inset 0 -1px rgba(0,55,54,.5),
-    0 2px 5px rgba(0,35,40,.26);
+  background:linear-gradient(#4d8295,#295969 48%,#173d4d) !important;
+  border:1px solid #a4dce6;
+  border-radius:3px;
+  box-shadow:inset 0 1px #ddf9ff88;
 }
-nav[aria-label="Main"] :is(button,a,[role="row"]):hover,
-nav[aria-label="Your Library"] :is(button,a,[role="row"]):hover {
-  background-color:rgba(192,255,237,.14) !important;
-  box-shadow:inset 0 0 0 1px rgba(218,255,245,.25);
+#Desktop_LeftSidebar_Id :is(a,button,[role="row"]):hover {
+  background-color:#87bdd331 !important;
 }
-/* Dark emerald listening surface and localized green light pools. */
-#main-view,#main main,[data-testid="home-page"],[data-testid="playlist-page"],[data-testid="track-page"] {
-  color:var(--aero-ink);background-color:var(--aero-emerald) !important;
-  background-image:
-    radial-gradient(circle 12px at 78% 14%,rgba(144,255,109,.36),transparent 100%),
-    radial-gradient(circle 18px at 91% 54%,rgba(130,255,60,.27),transparent 100%),
-    radial-gradient(circle 10px at 54% 31%,rgba(108,253,192,.31),transparent 100%),
-    radial-gradient(circle 26px at 68% 78%,rgba(171,252,39,.20),transparent 100%),
-    radial-gradient(ellipse 22% 23% at 88% 72%,rgba(167,245,31,.42),transparent 100%),
-    radial-gradient(ellipse 20% 25% at 61% 42%,rgba(17,201,128,.36),transparent 100%),
-    radial-gradient(ellipse 17% 19% at 14% 8%,rgba(71,198,196,.17),transparent 100%),
-    linear-gradient(125deg,#0e6352 0%,#06563c 28%,#034c34 58%,#013b31 100%) !important;
+/* WMPotify ui/mainarea.scss: dark graphite content and light/dark
+   separator below its toolbar. No emerald wallpaper. */
+#main-view,[data-testid="home-page"],
+[data-testid="playlist-page"],[data-testid="track-page"] {
+  color:var(--aerify-text);
+  background:#222 !important;
 }
 #main-view {
-  border:1px solid rgba(221,255,245,.71) !important;
-  border-radius:10px;
-  box-shadow:inset 0 1px rgba(255,255,255,.36),inset 0 0 0 2px rgba(0,41,40,.43),
-    0 3px 8px rgba(0,27,30,.36) !important;
+  border-radius:2px !important;
+  border:1px solid #7d9aa8 !important;
+  box-shadow:inset 0 1px #d4ebf233,inset 0 0 0 1px #071620a3 !important;
 }
-#main main :is(h1,h2,h3) {color:#f8fffb;text-shadow:0 1px 2px rgba(0,28,27,.65)}
-/* The current Home shortcuts default to two long columns. At a regular
-   desktop width, use four compact Aero strips so music shelves arrive sooner. */
-[data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l {
-  --item-height:58px;margin-bottom:8px !important;
+#main-view > header {
+  border-bottom:1px solid var(--wmp11-separator-shadow);
+  outline:1px solid var(--wmp11-separator-light);
 }
-@container (width >= 680px) {
+#main-view :is(h1,h2,h3) {color:#eef4f7;text-shadow:0 1px 1px #0008}
+/* Compact native Home filter controls and section rhythm. */
+[data-testid="home-page"] button[aria-pressed] {
+  min-height:25px;
+  padding-block:1px;
+  font-size:12px;
+}
+[data-testid="home-page"] [data-shelf="shelf"] {
+  margin-block-start:14px !important;
+}
+[data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l {margin-bottom:8px !important}
+/* WMPotify pages/home.scss: 3px shortcut tiles, 1px hover/selection
+   border and 4px inset artwork mat. Spotify 2.45 selectors verified. */
+[data-testid="home-page"] .CcRlyOo0u4fhd31I7iZq {
+  background:linear-gradient(#3c505a,#26343c 46%,#1b2b34 47%,#17272f) !important;
+  border:1px solid #728e9d !important;
+  border-radius:3px !important;
+  box-shadow:inset 0 1px #d4e6eb55,0 2px 4px #0006 !important;
+}
+[data-testid="home-page"] .CcRlyOo0u4fhd31I7iZq:hover {
+  background:linear-gradient(#556e7a,#354c58 46%,#233d4a 47%,#1a3441) !important;
+  border-color:#cde9f8 !important;
+}
+[data-testid="home-page"] .CcRlyOo0u4fhd31I7iZq:focus-within {
+  background:linear-gradient(#627f89,#3b5966 46%,#2c4d59 47%,#1c3d49) !important;
+  border-color:#95dbfd !important;
+}
+[data-testid="home-page"] .CcRlyOo0u4fhd31I7iZq .TEckankAmA70SrEtUSs_ {
+  box-sizing:border-box;
+  padding:4px;
+}
+[data-testid="home-page"] img[data-testid="shortcut-image"] {
+  border:1px solid #c5dce6;
+  border-radius:2px;
+  box-shadow:1px 1px #0005;
+}
+@container (width >= 600px) {
   [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed {
-    --item-height:58px;
-    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-    grid-template-rows:repeat(2,58px) !important;
-    grid-auto-rows:58px !important;
-    gap:8px !important;
-  }
-}
-@container (width >= 510px) and (width < 680px) {
-  [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed {
-    --item-height:56px;
+    --item-height:50px;
     grid-template-columns:repeat(3,minmax(0,1fr)) !important;
     gap:8px !important;
   }
+  [data-testid="home-page"] .lcKPSRpbeFvTvyLrI36l > .jZyXBWWqigs2RWA0z7ed > :nth-child(n+7) {
+    display:none !important;
+  }
 }
-/* Spotify's optional onboarding checklist occupies the first music shelf.
-   Its navigation is unrelated to playback, so omit this promo from Home. */
-[data-testid="home-page"] section.ycB7IQtWxiABRYSRVxp5 {
-  display:none !important;
+/* Spotify's optional Home announcement takes the first viewport away from
+   music. Keep Home's filter controls and music links in their native order. */
+[data-testid="home-ads-container"] {display:none !important}
+/* The optional onboarding card likewise displaces the first shelf. */
+[data-testid="home-page"] section.ycB7IQtWxiABRYSRVxp5 {display:none !important}
+/* Five artwork cards across a wide Home pane. Native art/content retained. */
+@container main-view-grid-area (width >= 680px) {
+  [data-testid="home-page"] [data-shelf="shelf"] .vPN6NLV0UJqY2kDtcf56.IKiPTZqEz15n8iB19aAW {
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+  [data-testid="home-page"] [data-shelf="shelf"] .vPN6NLV0UJqY2kDtcf56.IKiPTZqEz15n8iB19aAW > :nth-child(5) {
+    display:block !important;
+  }
+  [data-testid="home-page"] [data-shelf="shelf"] .vPN6NLV0UJqY2kDtcf56.IKiPTZqEz15n8iB19aAW > :nth-child(n+6) {
+    display:none !important;
+  }
 }
-/* Spotify's shortcut has a direct shortcut-background child. Paint that
-   container rather than its nested text link. */
-[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]) {
-  background:linear-gradient(180deg,rgba(112,224,160,.29) 0%,rgba(32,123,75,.34) 46%,
-    rgba(1,61,45,.73) 47%,rgba(0,43,38,.78) 100%) !important;
-  border:1px solid rgba(216,255,238,.65) !important;border-radius:4px !important;
-  box-shadow:inset 0 1px rgba(245,255,249,.65),inset 0 -1px rgba(0,25,24,.76),
-    0 2px 7px rgba(0,18,20,.4) !important;
-  transition:border-color .16s ease,box-shadow .16s ease;
+#main-view [data-testid="card-click-handler"]:has(img) {
+  background:#2a3035 !important;
+  border:1px solid #495b66;
+  border-radius:3px !important;
+  box-shadow:inset 0 1px #e9f7ff1c,0 2px 4px #0005;
 }
-[data-testid="home-page"] .CcRlyOo0u4fhd31I7iZq {
-  background:linear-gradient(180deg,rgba(189,248,220,.33) 0%,rgba(54,142,105,.35) 47%,
-    rgba(1,61,45,.76) 48%,rgba(0,44,37,.82) 100%) !important;
-  border:1px solid rgba(220,255,238,.69) !important;
-  border-radius:4px !important;
-  box-shadow:inset 0 1px rgba(255,255,255,.53),
-    inset 0 -1px rgba(0,26,24,.73),0 2px 6px rgba(0,21,22,.41) !important;
+#main-view [data-testid="card-click-handler"]:has(img):hover {
+  border-color:#aacbda;
+  background:#34424b !important;
 }
-[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]):hover {
-  border-color:rgba(230,255,244,.84) !important;
-  box-shadow:inset 0 1px rgba(255,255,255,.58),inset 0 -1px rgba(0,39,34,.5),
-    0 4px 9px rgba(0,23,23,.35) !important;
+/* WMPotify panels/npv.scss and ui/mainarea.scss: plain graphite panel,
+   thin separator and a framed/shadowed album cover. */
+.s8fIIxwITjOk1aFOxhPv,#Desktop_PanelContainer_Id {
+  background:#20282e !important;
+  border-left:3px solid var(--wmp11-separator-shadow) !important;
+  box-shadow:inset 1px 0 var(--wmp11-separator-light),-1px 0 #0009 !important;
 }
-[data-testid="home-page"] :is(a[href^="/playlist/"],a[href^="/album/"],
-  a[href^="/artist/"],a[href^="/collection/"]) {
-  background:transparent !important;border:0 !important;box-shadow:none !important;
-}
-[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]) button {
-  color:#f3fff9 !important;background:rgba(1,54,44,.55) !important;
-  border:1px solid rgba(205,255,231,.5) !important;
-  box-shadow:inset 0 1px rgba(255,255,255,.22),0 2px 5px rgba(0,25,23,.34) !important;
-  opacity:.38;transform:scale(.78);
-  transition:opacity .15s ease,transform .15s ease,background .15s ease;
-}
-[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]):is(:hover,:focus-within) button,
-[data-testid="home-page"] div:has(> [data-testid="shortcut-background"]) button:focus-visible {
-  opacity:1;transform:scale(.94);color:#064937 !important;
-  background:linear-gradient(180deg,#b9ffdc,#4fdfaa 45%,#138c69) !important;
-}
-[data-testid="home-page"] img,[data-testid="playlist-page"] img {
-  box-shadow:0 2px 5px rgba(0,23,23,.38);
-}
-img[data-testid="shortcut-image"] {
-  border:1px solid rgba(229,255,242,.47);border-radius:3px !important;
-}
-/* Right panel and table rows get inset treatment. */
-#Desktop_PanelContainer_Id,.s8fIIxwITjOk1aFOxhPv {
-  background:linear-gradient(160deg,#125e52,#063d39 72%,#032e31) !important;
-  border-left:1px solid rgba(205,255,240,.65) !important;
-  box-shadow:inset 1px 0 rgba(255,255,255,.24) !important;
-}
-#Desktop_PanelContainer_Id::before {
-  background-color:#064b3f !important;
-  background-image:linear-gradient(180deg,rgba(39,132,106,.32),rgba(1,38,36,.5)) !important;
-  opacity:1 !important;
-}
+#Desktop_PanelContainer_Id::before {background:#20282e !important}
+#Desktop_PanelContainer_Id section {background:transparent !important}
 #Desktop_PanelContainer_Id [data-testid="cover-art-slot"] {
-  border:1px solid rgba(221,255,238,.75);
-  border-radius:5px;
-  box-shadow:inset 0 1px rgba(255,255,255,.46),0 5px 13px rgba(0,22,24,.56);
-  overflow:hidden;
+  box-sizing:border-box;
+  max-width:245px;
+  margin-inline:auto;
+  padding:4px;
+  background:linear-gradient(#8ba9b7,#345464 12%,#142832);
+  border:1px solid #c5d6df;
+  border-radius:2px;
+  box-shadow:inset 0 1px #fff9,5px 5px 4px -4px #000c;
 }
-#Desktop_PanelContainer_Id img {
-  border:1px solid rgba(222,255,241,.66);border-radius:4px;
-  box-shadow:0 4px 10px rgba(0,24,25,.45);
-}
-#Desktop_PanelContainer_Id :is([role="row"],[role="listitem"]):hover,
-#main main :is([role="row"],[role="listitem"]):hover {
-  background:rgba(162,239,199,.13) !important;
-}
-#main main :is([role="row"],[role="listitem"])[aria-selected="true"] {
-  background:rgba(46,166,121,.27) !important;
-  box-shadow:inset 0 0 0 1px rgba(199,255,227,.35);
-}
-/* Continuous smoked-glass Windows Media Player transport. */
-[data-testid="now-playing-bar"],[aria-label="Now playing bar"],
+/* WMPotify ui/playerbar.scss: compact black deck, centered 404/268px
+   control pod, 33px art, 12px metadata and close-set transport buttons. */
 .XvuTwlgQRqJ5NnVLN9ZH {
-  color:var(--aero-ink) !important;
-  background:linear-gradient(180deg,#a7e8da 0%,#4e8d84 4%,#183b39 12%,
-    #0b2424 28%,#071714 72%,#030e0e 100%) !important;
-  border-top:1px solid #e5fff5 !important;
-  box-shadow:inset 0 2px rgba(255,255,255,.35),inset 0 -2px rgba(0,0,0,.65),
-    0 -4px 10px rgba(0,27,28,.48) !important;
+  position:relative;
+  z-index:10;
+  background:#101010 !important;
 }
-[data-testid="now-playing-bar"]::before,.XvuTwlgQRqJ5NnVLN9ZH::before {
-  content:"";position:absolute;inset:0 0 auto;height:4px;pointer-events:none;
-  background:linear-gradient(180deg,#e6fff7 0%,#9abbb1 39%,#386a66 42%,transparent 100%);
+[data-testid="now-playing-bar"] {
+  color:var(--aerify-text) !important;
+  background:linear-gradient(#838e91 0%,#2a3a42 4%,#171e23 12%,#101010 54%,#05080b) !important;
+  border-top:1px solid var(--wmp11-separator-light) !important;
+  box-shadow:inset 0 2px #fff4,inset 0 -1px #000d,0 -2px 5px #0007 !important;
 }
-[data-testid="now-playing-bar"] button {border-radius:999px}
-[data-testid="now-playing-bar"] button:hover {
-  color:#fff !important;background:rgba(156,238,204,.15);
-  box-shadow:inset 0 1px rgba(255,255,255,.28);
+[data-testid="player-controls"] > :has([data-testid="control-button-playpause"]) {
+  box-sizing:border-box;
+  width:min(404px,100%);
+  height:49px;
+  margin-inline:auto;
+  border:1px solid #9eabb677;
+  border-radius:26px;
+  background:linear-gradient(#7a899833,#13222ca3 43%,#05080bdf 50%,#1a252dcc);
+  box-shadow:inset 0 1px #fff5,inset 0 -1px #000c,0 2px 4px #0008;
+}
+[data-testid="now-playing-bar"] [data-testid="cover-art-button"] {
+  width:34px;height:34px;border-radius:0;
+}
+[data-testid="now-playing-bar"] [data-testid="cover-art-button"] img {
+  max-width:33px;max-height:33px;border-radius:0;box-shadow:1px 1px #0007;
+}
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget"],[data-testid="now-playing-widget-v2"]) {
+  font-size:12px;
+}
+[data-testid="now-playing-bar"] :is([data-testid="control-button-skip-back"],[data-testid="control-button-skip-forward"]) {
+  width:34px;height:23px;
+  color:#e4edf3;
+  background:linear-gradient(#4a6472,#283f4d 46%,#142a3a 47%,#243f4d);
+  border:1px solid #8097a5;border-radius:3px;
+  box-shadow:inset 0 1px #dceaf055,inset 0 -1px #0008;
+}
+[data-testid="now-playing-bar"] :is([data-testid="control-button-skip-back"],[data-testid="control-button-skip-forward"]):hover {
+  background:linear-gradient(#759dac,#416775 46%,#244a5b 47%,#335e70);
 }
 [data-testid="now-playing-bar"] [data-testid="control-button-playpause"] {
-  width:44px;height:44px;color:#f8fff9 !important;
-  background:linear-gradient(180deg,#d8ffeb 0%,#9ff8cb 25%,#38c68e 48%,
-    #0a8d62 51%,#006846 100%) !important;
-  border:2px solid #baffda !important;
-  box-shadow:inset 0 1px #fff,inset 0 -2px rgba(0,58,39,.6),
-    0 0 0 2px #092b2a,0 3px 8px rgba(0,0,0,.56) !important;
+  width:43px;height:43px;
+  color:#fff !important;
+  background:linear-gradient(#dffdec,#94eebb 25%,#35bc80 49%,#09835b 50%,#00543c) !important;
+  border:2px solid #a8f4ca !important;
+  border-radius:50% !important;
+  box-shadow:inset 0 1px #fff,inset 0 -2px #00452eaa,
+    0 0 0 2px #0a2028,0 2px 6px #000a !important;
 }
-[data-testid="now-playing-bar"] [data-testid="control-button-playpause"]:hover {filter:brightness(1.12)}
-[data-testid="now-playing-bar"] :is([data-testid="progress-bar-background"],
-  [data-testid="playback-progressbar"],.progress-bar__bg) {
-  background:#061817 !important;border:1px solid rgba(183,235,207,.48);
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.75),0 1px rgba(219,255,237,.15);
+[data-testid="now-playing-bar"] :is([data-testid="progress-bar-background"],[data-testid="playback-progressbar"],.progress-bar__bg) {
+  background:#080d13 !important;
+  border:1px solid #647e8b;
+  box-shadow:inset 0 1px 3px #000c,0 1px #d1e5ed33;
 }
 [data-testid="now-playing-bar"] :is([data-testid="progressBarFg"],.progress-bar__fg) {
-  background:linear-gradient(180deg,#d0ffe7,#53dca3 55%,#138d68) !important;
+  background:linear-gradient(#d1ffe3,#61dba1 55%,#16845f) !important;
 }
-[data-testid="now-playing-bar"] :is(time,[data-testid="progress-time"]) {
-  color:#d7f4e4 !important;font-variant-numeric:tabular-nums;
+@media (max-width:850px) {
+  [data-testid="player-controls"] > :has([data-testid="control-button-playpause"]) {
+    width:min(268px,100%);
+  }
 }
-/* Conditional separate queue card. */
+/* theme.js inserts this only when a next track is known. */
 .aerify-up-next {
-  position:fixed;left:14px;bottom:94px;z-index:200;display:flex;align-items:center;
-  gap:10px;width:min(284px,calc(100vw - 28px));min-height:64px;min-width:0;
-  padding:8px 11px;color:var(--aero-ink);font:12px/1.25 var(--aero-font);
-  background:linear-gradient(180deg,#9de6e9 0%,#50aebb 9%,#166f71 48%,
-    #074e52 50%,#06383d 100%);
-  border:1px solid #d6ffff;border-radius:6px;
-  box-shadow:inset 0 1px #fff,inset 0 -1px rgba(0,28,37,.7),
-    0 5px 15px rgba(0,24,28,.46);
-  pointer-events:none;
+  position:fixed;left:12px;bottom:82px;z-index:200;
+  display:flex;align-items:center;gap:9px;
+  width:min(265px,calc(100vw - 24px));min-width:0;min-height:58px;
+  padding:7px 9px;color:var(--aerify-text);
+  background:linear-gradient(#9cb9c7,#3f687a 11%,#1a3a4b 49%,#0b2636 50%,#071924);
+  border:1px solid #d6e5eb;border-radius:3px;
+  box-shadow:inset 0 1px #fff9,inset 0 -1px #001320,0 4px 12px #0009;
+  font:12px/1.25 var(--aerify-font);pointer-events:none;
 }
 .aerify-up-next__icon {
-  flex:none;width:38px;height:38px;border:1px solid #d0ffe6;border-radius:50%;
-  background:linear-gradient(180deg,#e6fff0,#a1f7ca 37%,#32bd89 51%,#056949);
-  box-shadow:inset 0 1px #fff,0 1px 4px rgba(0,20,25,.55);
+  flex:none;width:35px;height:35px;
+  border:1px solid #c8ffe0;border-radius:50%;
+  background:linear-gradient(#e9fff1,#a7f5c9 40%,#31b881 51%,#075941);
+  box-shadow:inset 0 1px #fff,0 1px 4px #0008;
 }
 .aerify-up-next__icon::after {
-  content:"";display:block;width:0;height:0;margin:11px 0 0 15px;
-  border-top:8px solid transparent;border-bottom:8px solid transparent;
-  border-left:11px solid #075740;
+  content:"";display:block;width:0;height:0;margin:10px 0 0 14px;
+  border-top:7px solid transparent;border-bottom:7px solid transparent;
+  border-left:10px solid #075640;
 }
 .aerify-up-next__details {display:grid;gap:2px;min-width:0}
 .aerify-up-next__label {
-  color:#d5ffe8;font-size:10px;font-weight:700;
-  text-transform:uppercase;letter-spacing:.08em;
+  color:#ccefe1;font-size:10px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
 }
 .aerify-up-next__song,.aerify-up-next__artist {
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .aerify-up-next__song {font-weight:700}
-.aerify-up-next__artist {color:#d0e8dd;font-size:11px}
-/* Optional Spicy Lyrics. Artwork retains source colors. */
-#SpicyLyricsPage {
-  color:var(--aero-ink);font-family:var(--aero-font);
-  background:radial-gradient(ellipse 28% 35% at 80% 20%,rgba(95,212,157,.20),transparent),
-    linear-gradient(145deg,#115e59,#064b3f 55%,#043639) !important;
-}
-#SpicyLyricsPage .ContentBox .LyricsContainer {
-  background:rgba(1,34,33,.28);box-shadow:inset 0 1px rgba(224,255,239,.19);
-}
-#SpicyLyricsPage .LyricsContainer .LyricsContent .line {
-  color:rgba(228,249,235,.60) !important;
-  text-shadow:0 1px 2px rgba(0,20,22,.7);transition:color .2s ease;
-}
-#SpicyLyricsPage .LyricsContainer .LyricsContent
-  :is(.line.Active,.line.active,.line.Current) {
-  color:#f8fff9 !important;
-  text-shadow:0 2px 3px rgba(0,25,25,.72),0 0 12px rgba(157,255,203,.42);
-}
-#SpicyLyricsPage .ContentBox .NowBar {
-  background:linear-gradient(180deg,#234941,#071714 35%,#030e0e) !important;
-  border-top:1px solid rgba(215,255,232,.65);
-}
-#SpicyLyricsPage .ContentBox .NowBar :is(.MediaBox,.MediaImageContainer) {
-  border:1px solid rgba(221,255,238,.51);border-radius:4px;
-  box-shadow:0 3px 9px rgba(0,20,23,.48);
-}
-.spicy-pip-wrapper {
-  color:var(--aero-ink);
-  background:linear-gradient(180deg,#87e2ef,#2aa8bf 10%,#0a5c6d 52%,#07414a) !important;
-  border:2px solid #c7faff;
-  box-shadow:inset 0 1px #fff,inset 0 -2px rgba(0,40,55,.6);
-}
-.spicy-pip-wrapper #SpicyLyricsPage {
-  border:1px solid rgba(211,255,237,.55);border-radius:5px;overflow:hidden;
-}
-.main-miniPlayer-container {
-  color:var(--aero-ink) !important;
-  background:linear-gradient(180deg,#91e4ed,#2aa8bd 12%,#115c63 22%,
-    #074a43 62%,#071714 100%) !important;
-  border:2px solid #d4ffff;
-  box-shadow:inset 0 1px #fff,0 5px 14px rgba(0,20,23,.45);
-}
+.aerify-up-next__artist {color:var(--aerify-muted);font-size:11px}
 :where(button,a,input,[role="button"],[role="option"],[role="row"]):focus-visible {
-  outline:2px solid var(--aero-focus) !important;outline-offset:2px;
+  outline:2px solid var(--aerify-focus) !important;outline-offset:2px;
 }
-::selection {color:#043b31;background:#b8ffd0}
-@media (max-width:800px) {
-  .aerify-up-next {width:min(240px,calc(100vw - 28px))}
-  [data-testid="now-playing-bar"] [data-testid="control-button-playpause"] {
-    width:38px;height:38px;
-  }
-}
+::selection {color:#071d23;background:#c5eeff}
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after {animation-duration:.01ms !important;transition-duration:.01ms !important}
 }
 @media (prefers-reduced-transparency:reduce) {
-  [data-testid="global-nav"] {background:#168ba5 !important}
-  nav[aria-label="Main"],nav[aria-label="Your Library"] {background:#145e64 !important}
-  #main main,[data-testid="home-page"],[data-testid="playlist-page"],
-  [data-testid="track-page"],#SpicyLyricsPage {background:#064b3f !important}
-  [data-testid="now-playing-bar"],[aria-label="Now playing bar"] {background:#071714 !important}
-  .aerify-up-next {background:#0c6468 !important}
+  #global-nav-bar {background:#142c46 !important}
+  #Desktop_LeftSidebar_Id {background:#20282e !important}
+  #main-view,[data-testid="home-page"] {background:#222 !important}
+  #Desktop_PanelContainer_Id {background:#20282e !important}
+  [data-testid="now-playing-bar"] {background:#101010 !important}
+  .aerify-up-next {background:#1a3a4b}
 }
 

@@ -87,25 +87,3 @@ test('visible Now Playing group name fills an empty API snapshot without a track
   assert.equal(state.artist.textContent, 'The Weeknd, Daft Punk');
 });
 
-test('Picture-in-Picture receives one scoped Aero stylesheet', () => {
-  const styles = [];
-  const pipDoc = {
-    head: { appendChild(style) { styles.push(style); } },
-    getElementById(id) { return styles.find((style) => style.id === id); },
-    createElement() { return {}; },
-  };
-  let onEnter;
-  const documentPictureInPicture = {
-    window: { document: pipDoc },
-    addEventListener(name, callback) { if (name === 'enter') onEnter = callback; },
-  };
-  const window = { documentPictureInPicture };
-  const document = { querySelector() { return null; } };
-  vm.runInNewContext(code, { window, document, documentPictureInPicture, setTimeout() {} });
-  assert.equal(styles.length, 1);
-  assert.match(styles[0].textContent, /#43bdd2/);
-  assert.match(styles[0].textContent, /#SpicyLyricsPage \.LyricsContainer/);
-  assert.match(styles[0].textContent, /prefers-reduced-transparency/);
-  onEnter({ window: { document: pipDoc } });
-  assert.equal(styles.length, 1);
-});

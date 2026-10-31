@@ -1,14 +1,16 @@
 # Aerify
 
-A Windows Vista / Windows 7 inspired Spicetify theme. It gives Spotify a bright cyan Aero frame, deep emerald listening surface, compact glass tiles, and a dark Windows Media Player transport deck. It also styles [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics)' full-screen lyrics and picture-in-picture popup as an Aero mini player.
+Aerify is a dark Windows Media Player and Windows 7 Aero inspired Spicetify theme. It uses WMPotify's source-level control and layout patterns to style Spotify's main window with a graphite content surface, charcoal sidebar, black transport, cyan highlights, and a green play control. Spotify's navigation and playback behavior stay in place. The theme uses Spotify's native window shell; it draws no outer border, fake title bar, or replacement window buttons.
 
-![Aerify concept preview](preview/aerify-preview.svg)
+![Aerify running in Spotify at compact window width](preview/aerify-live-2026-10-31.png)
+
+This is an actual Spotify window captured on October 31, 2026. The library was collapsed and playback was on the user's phone when captured.
 
 ## Install
 
 1. Install [Spotify desktop and Spicetify](https://spicetify.app/docs/getting-started/).
-2. Copy this repository into your Spicetify `Themes` folder as `Aerify`. On Windows that folder is `%appdata%\spicetify\Themes\Aerify`; on macOS/Linux it is `~/.config/spicetify/Themes/Aerify`.
-3. Run:
+2. Copy this repository into your Spicetify `Themes` folder as `Aerify`. On Windows, use `%appdata%\spicetify\Themes\Aerify`; on macOS or Linux, use `~/.config/spicetify/Themes/Aerify`.
+3. Enable the theme and its small queue card script:
 
    ```sh
    spicetify config current_theme Aerify color_scheme Aero
@@ -16,25 +18,21 @@ A Windows Vista / Windows 7 inspired Spicetify theme. It gives Spotify a bright 
    spicetify apply
    ```
 
-`Aero Blue` is an alternate color scheme: `spicetify config color_scheme "Aero Blue"`, then `spicetify apply`.
+`Aero Blue` is an alternate scheme: run `spicetify config color_scheme "Aero Blue"` and apply again.
 
-## Lyrics and mini player
+## Up next
 
-Install [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) separately through Spicetify Marketplace. Its full-screen page gets Aerify's frosted background and luminous active line. Its **Spicy Popup Lyrics** button opens the picture-in-picture mini player, which receives the same Aero frame and transport styling. Aerify does not bundle or modify Spicy Lyrics, and lyrics availability depends on that extension and its sources.
-
-`theme.js` paints both Spicy Lyrics' picture-in-picture window and Spotify's native Document Picture-in-Picture mini player. It runs only when the browser exposes that API. Spotify changes its mini player markup between releases; shared window and button styling is resilient, while finer control styling may need updates.
-
-An Aero card above the bottom-left player appears when Spicetify reports a next song, whether it comes from the explicit queue or normal playlist playback. It disappears when no next song is available. It reads player state locally, updates on song changes and at a low frequency while the window is visible, and never starts playback or makes network requests.
+A separate card above the bottom-left player appears when a next song is known. It checks Spotify's queue and player state, then the visible Now Playing panel if needed. It disappears when no next song can be identified. The script reads local state, updates on song changes and infrequently while the window is visible, and never starts playback or makes network requests.
 
 ## Development
 
-- `color.ini` defines Spicetify's semantic colors.
-- `user.css` styles Spotify and the optional Spicy Lyrics extension.
-- `theme.js` styles separate picture-in-picture windows.
-- `preview/aerify-preview.svg` is a concept illustration for the visual direction, not a screenshot of a live Spotify installation.
+- `color.ini` defines the Spicetify color schemes.
+- `user.css` styles Spotify's main window.
+- `theme.js` renders only the conditional Up next card.
+- A live Spotify screenshot is the visual reference for each completed design pass. Earlier captures show earlier versions.
 
-The theme uses native Spotify playback and navigation. Its script paints picture-in-picture documents and displays a single queue preview. No external fonts, network calls, or lyric provider credentials are included. CSS selectors may need maintenance after Spotify or Spicy Lyrics updates.
+Check `theme.js` with `node --check theme.js`, run the queue tests with `node --test tests/queue-glance.test.js`, and inspect the applied theme in Spotify. A real screenshot is needed to verify visual changes.
 
-## Credits
+## Credits and license
 
-Visual inspiration: Windows Vista / Windows 7 Aero, Windows Media Player, the supplied Aerify reference image, and the Aero material in [WMPotify](https://github.com/Ingan121/WMPotify). Aerify retains Spotify's current navigation and does not include WMPotify code. Spicy Lyrics remains a separate project by its maintainers.
+Aerify takes visual direction and a source foundation from Windows Media Player and [WMPotify](https://github.com/Ingan121/WMPotify). The upstream SCSS used for this rebuild is preserved in `upstream/WMPotify/`; `user.css` adapts its Aero controls, panels, and transport styling under the MIT license. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the copyright notice and source links. Aerify does not include WMPotify's image resources or application code.
